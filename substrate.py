@@ -2,10 +2,10 @@
 def draw_matrix(matrix):
     print '  ',
     for j in range(len(matrix[0])):
-        print str(j)+ ' ',
+        print str(j*h)+ ' ',
     print
     for i, row in enumerate(matrix):
-        print i, row
+        print i*tau, ' '.join(['%.4f' % e for e in row])
 
 def perkelties_metodas(coef):
     CD = []
@@ -25,19 +25,18 @@ def perkelties_metodas(coef):
         X.append(Xi)
     print coef
     X.reverse()
-    print X
-    return X 
+    print Xi
+    return X
 
-n = 5 # x - koord
-m = 5 # y - koord
+n = 11 # x - koord erdve
+m = 10 # y - koord laikas
 S0 = 1 # 1 microM = 0,01KM
-Ds = 300 # micro m^2/s
-Dp = 300 # micro m^2/s
-d = 0.1 # mm maksimalus fermento membranos sluoksnis
-h = 0.01 # x kitimo zingsnis x in [0;d]
-Km = 100 # microM
-Vmax = 100 # microM/s
-d = 0 # tristrizainiu matricu lygties reiksme x1 + x2 = d.
+Ds = 300 # 300 micro m^2/s
+Dp = 300 # 300 micro m^2/s
+d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
+h = 10 # x kitimo zingsnis x in [0;d]
+Km = 100 #100 microM
+Vmax = 100 #100 microM/s
 tau_diff = [0.5, 1, 3] # delta time
 tau = tau_diff[0]
 
@@ -59,13 +58,16 @@ for i in range(m):
         coef = []
         b1 = -1 - coef_c
         c1 = 1
-        d1 = 0
+       # d1 = 0
+        d1 = ((h * h) / (Ds * tau)) * (((Vmax * substrate[i-1][1] * tau) / 
+            (Km + substrate[i-1][1])) - substrate[i-1][1])
         coef.append([b1,c1,d1])
         for l in range(1, n - 1):
             al = 1
             bl = -2 - coef_c
             cl = 1
-            dl = 0
+            dl = ((h * h) / (Ds * tau)) * (((Vmax * substrate[i-1][l] * tau)
+                /(Km + substrate[i-1][l])) - substrate[i-1][l])
             coef.append([al, bl, cl, dl])
         an = 1
         bn = -2 - coef_c
