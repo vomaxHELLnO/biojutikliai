@@ -14,7 +14,7 @@ def draw_matrix(substrate):
     x = [i*h/1000. for i in range(n)]
     plt.xlabel('x, mm')
     plt.ylabel('S, micro M')
-    plt.xticks(arange(min(x), max(x)+ (h/1000.), h/1000.))
+    plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
     plt.yticks(arange(0, 1 + 0.1, 0.1))
     plt.plot(x, substrate[1], 'm')
     plt.plot(x, substrate[2], 'r')
@@ -41,17 +41,16 @@ def perkelties_metodas(coef):
     X.reverse()
     return X
 
-n = 11 # x - koord erdve
-m = 10 # y - koord laikas
 S0 = 1 # 1 microM = 0,01KM
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
 d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
-h = 10 # x kitimo zingsnis x in [0;d]
+h = 0.1 # x kitimo zingsnis x in [0;d]
+n = int(d / h + 1) # erdves zingsniu skaicius
+m = 10 # laiko zingsniu skaicius
 Km = 100 #100 microM
 Vmax = 100 #100 microM/s
-tau_diff = [0.5, 1, 3] # delta time
-tau = tau_diff[0]
+tau = 0.5 # delta time
 
 def get_substrate_matrix():
     substrate = []
