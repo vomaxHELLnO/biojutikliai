@@ -23,8 +23,8 @@ def draw_matrix(substrate, label='S, micro M'):
     plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
     plt.show()
 
-def get_current(product):
-    return ne*F*Dp*array(product)/h
+def get_current(product, enzyme_width):
+    return ne*F*Dp*array(product)/h #h vietoj enzime storio
 
 def draw_current(product, label):
 
@@ -33,11 +33,11 @@ def draw_current(product, label):
     plt.ylabel(label)
    # plt.xticks(arange(min(time), max(time)+ (0.01), 0.01))
    # plt.yticks(arange(0, 1 + 0.1, 0.1))
-    plt.plot(time, get_current(array(product)[:, int(10/h - 1)]), 'm')
-    plt.plot(time, get_current(array(product)[:, int(15/h - 1)]), 'r')
-    plt.plot(time, get_current(array(product)[:, int(100/h - 1)]), 'b')
-    plt.plot(time, get_current(array(product)[:, int(150/h - 1)]), 'g')
-    plt.legend(['0.01mm','0.015mm','0.1mm','0.15mm'],loc = 'left')
+    plt.plot(time, get_current(array(product)[:, int(10/h - 1)], 10), 'm')
+    plt.plot(time, get_current(array(product)[:, int(15/h - 1)], 15), 'r')
+    plt.plot(time, get_current(array(product)[:, int(80/h - 1)], 80), 'b')
+    plt.plot(time, get_current(array(product)[:, int(90/h - 1)], 90), 'g')
+    plt.legend(['0.01mm','0.015mm','0.08mm','0.09mm'],loc = 'left')
     plt.show()
 
 def perkelties_metodas(coef):
@@ -66,13 +66,13 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
-d = 200 # 0.1 mm maksimalus fermento membranos sluoksnis
+d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 n = int(d / h + 1) # erdves zingsniu skaicius
 Km = 100 #100 microM
 Vmax = 100 #100 microM/s
 tau = 0.1 # delta time
-T = 20 # maksimalus stebejimo laikas
+T = 10 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
 
 def get_substrate_matrix():
@@ -130,7 +130,7 @@ def get_product_matrix(substrate):
         if i != 0:
             coef_c = (h * h) / (tau * Dp)
             coef = []
-            b1 = -1 - coef_c
+            b1 = -2 - coef_c
             c1 = 1
             d1 = -1 * ((h * h) / (Dp * tau)) * (((Vmax * substrate[i-1][1] * tau) / 
                 (Km + substrate[i-1][1])) + product[i-1][1])
@@ -160,4 +160,4 @@ if __name__ == '__main__':
     #print_matrix(product)
     draw_matrix(product, 'P, micro M')
     draw_matrix(substrate, 'S, micro M')
-    draw_current(product, 'i, nA/m^2')
+    draw_current(product, 'i')
