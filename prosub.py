@@ -62,10 +62,11 @@ def perkelties_metodas(coef):
 S0 = 1 # 1 microM = 0,01KM
 P0 = 0 #
 ne = 2
+#N = ~200, 1% paklaida, 303p del laiko
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
-d = 150 # 0.1 mm maksimalus fermento membranos sluoksnis
+d = 200 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 n = int(d / h + 1) # erdves zingsniu skaicius
 Km = 100 #100 microM
@@ -157,7 +158,6 @@ if __name__ == '__main__':
     substrate = get_substrate_matrix()
     product = get_product_matrix(substrate)
     #print_matrix(product)
-   # draw_matrix(product, 'P, micro M')
-   # draw_matrix(substrate, 'S, micro M')
+    draw_matrix(product, 'P, micro M')
+    draw_matrix(substrate, 'S, micro M')
     draw_current(product, 'i, nA/m^2')
-    get_current_matrix(product)

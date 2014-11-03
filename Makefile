@@ -1,2 +1,2 @@
 run_program:
-	python substrate.py
+	python prosub.py
