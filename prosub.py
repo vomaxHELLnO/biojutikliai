@@ -24,7 +24,7 @@ def draw_matrix(substrate, label='S, micro M'):
     plt.show()
 
 def get_current(product):
-    return ne*F*Dp*array(product)/h/1000000
+    return ne*F*Dp*array(product)/h/10**9
 
 def draw_current(product, response_time, label):
 
@@ -78,6 +78,7 @@ tau = 0.1 # delta time
 T = 50 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
 epsilon = 0.035
+I = ne*F*Vmax*d/2 #max i, (59) knygos formule
 
 def get_substrate_matrix():
     substrate = []
@@ -172,4 +173,4 @@ if __name__ == '__main__':
     #print_matrix(product)
     draw_matrix(product, 'P, micro M')
     draw_matrix(substrate, 'S, micro M')
-    draw_current(product, time, 'i')
+    draw_current(product, time, 'i, nA/mm$^2$')
