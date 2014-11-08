@@ -23,21 +23,24 @@ def draw_matrix(substrate, label='S, micro M'):
     plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
     plt.show()
 
-def get_current(product, enzyme_width):
-    return ne*F*Dp*array(product)/h #h vietoj enzime storio
+def get_current(product):
+    return ne*F*Dp*array(product)/h/1000000
 
-def draw_current(product, label):
+def draw_current(product, response_time, label):
 
-    time = [tau*i  for i in range(m)]
+   # time = [tau*i for i in range(m)]
+    time = [tau * i for i in range(int(response_time/h))]
     plt.xlabel('t, s')
     plt.ylabel(label)
    # plt.xticks(arange(min(time), max(time)+ (0.01), 0.01))
    # plt.yticks(arange(0, 1 + 0.1, 0.1))
-    plt.plot(time, get_current(array(product)[:, int(10/h - 1)], 10), 'm')
-    plt.plot(time, get_current(array(product)[:, int(15/h - 1)], 15), 'r')
-    plt.plot(time, get_current(array(product)[:, int(80/h - 1)], 80), 'b')
-    plt.plot(time, get_current(array(product)[:, int(90/h - 1)], 90), 'g')
-    plt.legend(['0.01mm','0.015mm','0.08mm','0.09mm'],loc = 'left')
+   # import ipdb; ipdb.set_trace()
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(10/h - 1)]), 'm')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(15/h - 1)]), 'r')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(100/h - 1)]), 'b')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(150/h - 1)]), 'g')
+    plt.legend(['0.01mm','0.015mm','0.1mm','0.15mm'],loc = 'upper left')
+    plt.xlim(0, response_time)
     plt.show()
 
 def perkelties_metodas(coef):
@@ -66,14 +69,15 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
-d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
+d = 151 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 n = int(d / h + 1) # erdves zingsniu skaicius
 Km = 100 #100 microM
 Vmax = 100 #100 microM/s
 tau = 0.1 # delta time
-T = 10 # maksimalus stebejimo laikas
+T = 50 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
+epsilon = 0.035
 
 def get_substrate_matrix():
     substrate = []
@@ -125,8 +129,6 @@ def get_product_matrix(substrate):
                 product[i].append(None)
             if j == (n - 1):
                 product[i][j] = P0
-        #if i == 49:
-         #   import ipdb; ipdb.set_trace()
         if i != 0:
             coef_c = (h * h) / (tau * Dp)
             coef = []
@@ -154,10 +156,20 @@ def get_product_matrix(substrate):
                 product[i][k] = X[k - 1]
     return product
 
+def get_T(product, enzyme_width):
+    time = 0
+    i1 = get_current(array(product)[:, int(enzyme_width/h)])
+    for t in range(int(T/tau)):
+        if time == 0:
+            if ((t*tau)/i1[t])*abs((i1[t]-i1[t-1])/((t*tau)-((t-1)*tau))) < epsilon:
+                time =t * tau # t- laiko zingsnis
+    return time
+
 if __name__ == '__main__':
     substrate = get_substrate_matrix()
     product = get_product_matrix(substrate)
+    time = get_T(product, 0.09)
     #print_matrix(product)
     draw_matrix(product, 'P, micro M')
     draw_matrix(substrate, 'S, micro M')
-    draw_current(product, 'i')
+    draw_current(product, time, 'i')
