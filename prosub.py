@@ -35,11 +35,12 @@ def draw_current(product, response_time, label):
    # plt.xticks(arange(min(time), max(time)+ (0.01), 0.01))
    # plt.yticks(arange(0, 1 + 0.1, 0.1))
    # import ipdb; ipdb.set_trace()
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(10/h - 1)]), 'm')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(15/h - 1)]), 'r')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(100/h - 1)]), 'b')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(150/h - 1)]), 'g')
-    plt.legend(['0.01mm','0.015mm','0.1mm','0.15mm'],loc = 'upper left')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 10/h)]), 'm')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 15/h)]), 'r')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 100/h)]), 'b')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 130/h)]), 'g')
+    plt.legend(['d - 0.01mm = 0.14mm','d - 0.015mm = 0.135mm','d - 0.1mm = 0.05mm','d - 0.13mm = 0.02mm'],loc = 'upper left')
+    plt.title('Current when d = 0.15mm and  $\epsilon$ = 0.01')
     plt.xlim(0, response_time)
     plt.show()
 
@@ -77,7 +78,7 @@ Vmax = 100 #100 microM/s
 tau = 0.1 # delta time
 T = 50 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
-epsilon = 0.035
+epsilon = 0.05
 I = ne*F*Vmax*d/2 #max i, (59) knygos formule
 
 def get_substrate_matrix():
@@ -169,7 +170,7 @@ def get_T(product, enzyme_width):
 if __name__ == '__main__':
     substrate = get_substrate_matrix()
     product = get_product_matrix(substrate)
-    time = get_T(product, 0.09)
+    time = get_T(product, int(d - 130))
     #print_matrix(product)
     draw_matrix(product, 'P, micro M')
     draw_matrix(substrate, 'S, micro M')
