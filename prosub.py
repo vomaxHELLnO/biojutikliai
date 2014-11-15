@@ -16,15 +16,19 @@ def draw_matrix(substrate, label='S, micro M'):
     plt.ylabel(label)
     plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
     plt.yticks(arange(0, 1 + 0.1, 0.1))
+ #   plt.plot(x, substrate[int(0.1/tau)], 'm')
+ #   plt.plot(x, substrate[int(0.2/tau)], 'm')
+    plt.plot(x, substrate[int(0.3/tau)], 'm')
+    plt.plot(x, substrate[int(0.4/tau)], 'm')
     plt.plot(x, substrate[int(0.5/tau)], 'm')
     plt.plot(x, substrate[int(1/tau)], 'r')
     plt.plot(x, substrate[int(3/tau)], 'b')
     plt.plot(x, substrate[int(5/tau - 1)], 'g')
-    plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
+    plt.legend(['0.3s','0.4s','0.5s','1s','3s','5s'],loc = 'left')
     plt.show()
 
 def get_current(product):
-    return ne*F*Dp*array(product)/h/10**9
+    return ne*F*Dp*array(product)/h/10**6
 
 def draw_current(product, response_time, label):
 
@@ -35,10 +39,11 @@ def draw_current(product, response_time, label):
    # plt.xticks(arange(min(time), max(time)+ (0.01), 0.01))
    # plt.yticks(arange(0, 1 + 0.1, 0.1))
    # import ipdb; ipdb.set_trace()
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 10/h)]), 'm')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 15/h)]), 'r')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 100/h)]), 'b')
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 130/h)]), 'g')
+    plt.plot(time, get_current(array(product)[:int(response_time/tau), 1]), 'm')
+   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 10/h)]), 'm')
+   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 15/h)]), 'r')
+   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 100/h)]), 'b')
+   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 130/h)]), 'g')
     plt.legend(['d - 0.01mm = 0.14mm','d - 0.015mm = 0.135mm','d - 0.1mm = 0.05mm','d - 0.13mm = 0.02mm'],loc = 'upper left')
     plt.title('Current when d = 0.15mm and  $\epsilon$ = 0.01')
     plt.xlim(0, response_time)
@@ -70,7 +75,7 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
-d = 151 # 0.1 mm maksimalus fermento membranos sluoksnis
+d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 n = int(d / h + 1) # erdves zingsniu skaicius
 Km = 100 #100 microM
