@@ -16,38 +16,29 @@ def draw_matrix(substrate, label='S, micro M'):
     plt.ylabel(label)
     plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
     plt.yticks(arange(0, 1 + 0.1, 0.1))
- #   plt.plot(x, substrate[int(0.1/tau)], 'm')
- #   plt.plot(x, substrate[int(0.2/tau)], 'm')
-    plt.plot(x, substrate[int(0.3/tau)], 'm')
-    plt.plot(x, substrate[int(0.4/tau)], 'm')
     plt.plot(x, substrate[int(0.5/tau)], 'm')
     plt.plot(x, substrate[int(1/tau)], 'r')
     plt.plot(x, substrate[int(3/tau)], 'b')
     plt.plot(x, substrate[int(5/tau - 1)], 'g')
-    plt.legend(['0.3s','0.4s','0.5s','1s','3s','5s'],loc = 'left')
+    plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
     plt.show()
 
 def get_current(product):
     return ne*F*Dp*array(product)/h/10**6
 
-def draw_current(product, response_time, label):
-
-   # time = [tau*i for i in range(m)]
+def draw_current(product, response_time, label, color):
+    # time = [tau*i for i in range(m)]
     time = [tau * i for i in range(int(response_time/h))]
     plt.xlabel('t, s')
     plt.ylabel(label)
-   # plt.xticks(arange(min(time), max(time)+ (0.01), 0.01))
-   # plt.yticks(arange(0, 1 + 0.1, 0.1))
-   # import ipdb; ipdb.set_trace()
-    plt.plot(time, get_current(array(product)[:int(response_time/tau), 1]), 'm')
-   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 10/h)]), 'm')
-   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 15/h)]), 'r')
-   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 100/h)]), 'b')
-   # plt.plot(time, get_current(array(product)[:int(response_time/tau), int(d/h - 130/h)]), 'g')
-    plt.legend(['d - 0.01mm = 0.14mm','d - 0.015mm = 0.135mm','d - 0.1mm = 0.05mm','d - 0.13mm = 0.02mm'],loc = 'upper left')
-    plt.title('Current when d = 0.15mm and  $\epsilon$ = 0.01')
-    plt.xlim(0, response_time)
-    plt.show()
+    plt.xticks(arange(min(time), max(time)+ (0.01), 1))
+    plt.yticks(arange(0, 1 + 0.1, 0.1))
+    # import ipdb; ipdb.set_trace()
+    plt.plot(time, get_current(array(product)[0:int(response_time/tau), 1]), color)
+    plt.legend(['d = 0.01mm','d = 0.015mm','d = 0.1mm','d = 0.15mm'],loc = 'upper left')
+    plt.title('Current when $\epsilon$ = 0.01')
+    # plt.xlim(0, response_time)
+    # plt.show()
 
 def perkelties_metodas(coef):
     CD = []
@@ -75,16 +66,16 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s
-d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
+#d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
-n = int(d / h + 1) # erdves zingsniu skaicius
+#n = int(d / h + 1) # erdves zingsniu skaicius
 Km = 100 #100 microM
 Vmax = 100 #100 microM/s
 tau = 0.1 # delta time
 T = 50 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
-epsilon = 0.05
-I = ne*F*Vmax*d/2 #max i, (59) knygos formule
+epsilon = 0.40
+#I = ne*F*Vmax*d/2 #max i, (59) knygos formule
 
 def get_substrate_matrix():
     substrate = []
@@ -165,18 +156,32 @@ def get_product_matrix(substrate):
 
 def get_T(product, enzyme_width):
     time = 0
-    i1 = get_current(array(product)[:, int(enzyme_width/h)])
+    i1 = get_current(array(product)[:, 1])
     for t in range(int(T/tau)):
-        if time == 0:
+        if time == 0 and (t*tau) > 2:
             if ((t*tau)/i1[t])*abs((i1[t]-i1[t-1])/((t*tau)-((t-1)*tau))) < epsilon:
-                time =t * tau # t- laiko zingsnis
+                time = t * tau # t- laiko zingsnis
     return time
 
 if __name__ == '__main__':
-    substrate = get_substrate_matrix()
-    product = get_product_matrix(substrate)
-    time = get_T(product, int(d - 130))
-    #print_matrix(product)
-    draw_matrix(product, 'P, micro M')
-    draw_matrix(substrate, 'S, micro M')
-    draw_current(product, time, 'i, nA/mm$^2$')
+    # d = 100
+    # n = int(d / h+1)
+    # substrate = get_substrate_matrix()
+    # product = get_product_matrix(substrate)
+    # draw_matrix(product, 'P, micro M')
+    # draw_matrix(substrate, 'S, micro M')
+    # print_matrix(product)
+    colors = ['m','r','b','g']
+    dlengs = [10, 15, 100, 150]
+    for i, d in enumerate(dlengs):
+        n = int(d / h + 1) # erdves zingsniu skaicius
+        substrate = get_substrate_matrix()
+        product = get_product_matrix(substrate)
+        print( product[0][10])
+        print( product[1][10])
+        print( product[2][10])
+        print( product[3][10])
+        draw_current(product, T, 'i, nA/mm$^2$', colors[i])
+    T_response = get_T(product, 50)
+    plt.xlim(0, T_response)
+    plt.show()
