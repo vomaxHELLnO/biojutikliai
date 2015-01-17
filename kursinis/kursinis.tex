@@ -24,7 +24,7 @@
 % Titulinio aprašas
 \vumifdept{Programų sistemų katedra}
 \vumifpaper{Kursinis darbas}
-\title{Selektyvios membranos modeliavimas amperometriniame biojutiklyje}
+\title{Biojutiklio su selektyvia membrana kompiuterinis modeliavimas}
 % \title{Esama situacija su dviem sluoksniais}
 % \title{Ištirti selektyvios membranos įtaką amperometrinio bijojutiklio jautriui}
 \def\titleineng{*angl. pav.}
@@ -47,12 +47,15 @@
 \sectionnonum{Įvadas}
 \textit{<Tektas>} \textbf{*}.
 
-\section{Mono-Layer Mono-Enzyme Model of Biosensor}
-Formules were taken from \cite{baronas2009mathematical}.
+\section{Biojutiklio su selektyvia membrana modelis}
+Sudarant modelius bei lygtis buvo pasinaudota šaltiniais:
+\cite{baronas2009mathematical}, \cite{baronas2006computational},
+\cite{baronas2003influence}.
 
-\subsection{Mathematical Model}
-According to simplified scheme, the substrate (S) binds to the enzyme (E) and is
-converted to poduct (P),
+\subsection{Matematinis modelis}
+Remiantis supaprastinta schema koncentratas (S) prisijungia prie fermento (E)
+ir yra
+paverčiamas į produktą (P),
 \begin{equation}\label{eq:basic} 
     S \overset{E}{\rightarrow} P
 \end{equation}
@@ -67,7 +70,7 @@ converted to poduct (P),
 \end{equation}
 
 
-\subsection{Initial and Boundary Conditions}
+\subsection{Pradinės ir kraštinės sąlygos}
 \begin{equation}
 \begin{aligned}
     &S(x, 0) = 0,\; x \in [0;d),\\
@@ -91,19 +94,15 @@ converted to poduct (P),
 \end{equation}
 
 \begin{equation} 
-    \left. \frac{\delta S}{\delta x} \right|_{x=0} = 0, t>0.
-\end{equation}
-
-\begin{equation} 
     S(d, t) = S_0,\; t>0,
 \end{equation}
 
 \begin{equation} 
-    P(d, t) = P_0,\; t>0.
+    P(d, t) = 0,\; t>0.
 \end{equation}
 
-\subsection{Characteeristics of the Biosensor Response}
-\subsubsection{Response Time}
+\subsection{Biosensoriaus atsako charakteristikos}
+\subsubsection{Atsako laikas}
 \begin{equation} 
 \begin{aligned}
     T = \underset{i(t)>0}{min}\left\{t:\frac{t}{i(t)} \left| \frac{d_i(t)}{dt}
@@ -111,8 +110,8 @@ converted to poduct (P),
 \end{aligned}
 \end{equation}
 
-\subsection{Numerical Approximation of Equations}
-\subsubsection{Implicit Scheme}
+\subsection{Skaitinis lygčių aproksimavimas}
+\subsubsection{Neišreikštinė schema(Implicit Scheme)}
 
 \begin{equation}
 \begin{aligned} 
@@ -126,7 +125,7 @@ converted to poduct (P),
 \end{aligned}
 \end{equation}
 
-\subsubsection{Initial and Boundry Condtitions of the Model}
+\subsubsection{Pradinės ir kraštinės modelio sąlygos}
 \begin{equation}
 \begin{aligned}
     &S_i^0 = 0, i = 0,\;...,\;N-1,\\
@@ -149,44 +148,43 @@ converted to poduct (P),
     P_0^j = 0, P_N^j = P_0, j=1,\; ...,\;M, 
 \end{equation}
 
-\subsubsection{Calculation Procedure}
+\subsubsection{Skaičiavimo procedūra}
 
 \begin{equation} 
     i(t_j) \approx t_j = n_eFD_pP_i^j/h,\; j=1,\;...,\;M. 
 \end{equation}
 
-\subsection{Validation of Numerical Solution}
-\subsubsection{Inicial Conditions of Calculations}
+\subsection{Skaitinio sprendimo tikrinimas}
+\subsubsection{Pradinės skaičiavimų sąlygos}
 
 \begin{equation}
 \begin{aligned}
-    &S_0 = 1 \mu M,\; P_0 = 0 \mu M,\\
-    &D_s = 300 \mu m^2/s,\; D_p = 300 \mu m^s/s,\\
-    &T = 50s,\;\; d_1 = 10 \mu m,\; d_2 = 15\mu m,\; d_3 = 100\mu m; d_4 =
-    150\mu m,\\
-    &\tau = 0.1s,\; h=0.1 \mu m,\\
-    &V_{max} = 100\mu M /s,\; \epsilon = 0.05,\\
-    &F=961485,\; K_M= 100\mu M,\; n_e = 2.
+    &S_0 = 1 \mathrm{\mu M},\; P_0 = 0 \mathrm{\mu M},\\
+    &D_s = 300 \mathrm{\mu m^2/s},\; D_p = 300 \mathrm{\mu m^s/s},\\
+    &T = 50\mathrm{s},\;\; d_1 = 10 \mathrm{\mu m},\; d_2 = 15\mathrm{\mu m},\; d_3 = 100\mathrm{\mu m}; d_4 =
+    150\mathrm{\mu m},\\
+    &\tau = 0.1\mathrm{s},\; h=0.1 \mathrm{\mu m},\\
+    &V_{max} = 100\mathrm{\mu M /s},\; \epsilon = 0.05,\\
+    &F=961485,\; K_M= 100\mathrm{\mu M},\; n_e = 2.
 \end{aligned}
 \end{equation}
 
-\subsubsection{Obtained Matrixes from the Given Implicit Scheme}
-\textit{Used: Finite Difference Solution, Implicit Scheme. Solved using Tridiagonal Matrix
-Algorythm.}
+\subsubsection{Gautos matricos iš neišreikštinės schemos}
+\textit{Lygčių sistemos gautos naudojant baigtinių skirtumų medodą ir neišreikštines schemas. Lygtys išsprėstos taikant triįstrižainių matricų algoritmą.}
 \begin{equation}
 \left\{
 \begin{aligned}
     &S_{i+1}^{j+1}-S_i^{j+1}\left(1+\frac{h^2}{D\tau}\right)
-        = \frac{h^2}{D\tau} \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when \; j = 0,\\
+        = \frac{h^2}{D\tau} \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai \; i = 1,\\
     &\dots\;,\\
     &S_{i-1}^{j+1}-S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+S_{i+1}^{j+1}
         = \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when\; j =
-        1,\;...,\;M-1,\\
+        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
+        2,\;...,\;N-1,\\
     &\dots\;,\\
     &S_0 + S_{i-1}^{j+1} - S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
         =  \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when \; j = M.
+        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when \; kai i = N.
 \end{aligned}
 \right.
 \end{equation}
@@ -195,21 +193,21 @@ Algorythm.}
 \left\{
 \begin{aligned}
     &P_{i+1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
-        = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_maxS_i^j\tau}{K_M+S_i^j}\right),\; when \; j = 0,\\
+        = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_maxS_i^j\tau}{K_M+S_i^j}\right),\; kai \; i = 1,\\
     &\dots\;,\\
     &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+P_{i+1}^{j+1}
         = \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when\; j =
-        1,\;...,\;M-1,\\
+        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
+        2,\;...,\;N-1,\\
     &\dots\;,\\
     &P_0 + P_{i-1}^{j+1} - P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
         =  \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when \; j = M.
+        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i = N.
 \end{aligned}
 \right.
 \end{equation}
 
-\subsubsection{Results}
+\subsubsection{Rezultatai}
 
 \begin{figure}[H]
     \centering
