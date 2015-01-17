@@ -60,12 +60,20 @@ paverčiamas į produktą (P),
     S \overset{E}{\rightarrow} P
 \end{equation}
 
+Biojutiklio veikimo sistemos lygiai: koncentratas, fermento sluoksnis($\Omega_2$),
+selektyvios
+membranos sluoksnis($\Omega_1$), elektrodas.
+\begin{equation}
+    \frac{\delta P_1}{\delta t} = D_{1P} \frac{\delta^2 P_1}{\delta x^2}, \;
+    kai\; x \in \Omega_1,\;\; t > 0.
+\end{equation}
+
 \begin{equation}
 \begin{aligned} 
     &\frac{\delta S}{\delta t} = D_S \frac{\delta^2 S}{\delta x^2} -
-    \frac{V_{max} S}{K_M + S},\\ 
-    &\frac{\delta P}{\delta t} = D_P \frac{\delta^2 P}{\delta x^2} +
-    \frac{V_{max} S}{K_M + S} ,\;\; x \in (0; d),\;\; t > 0
+    \frac{V_{max} S}{K_M + S}, \; kai\; x \in \Omega_2,\;\; t > 0.  \\ 
+    &\frac{\delta P_2}{\delta t} = D_{2P} \frac{\delta^2 P_2}{\delta x^2} +
+    \frac{V_{max} S}{K_M + S}, \; kai\; x \in \Omega_2 ,\;\; t > 0.
 \end{aligned}
 \end{equation}
 
@@ -73,20 +81,26 @@ paverčiamas į produktą (P),
 \subsection{Pradinės ir kraštinės sąlygos}
 \begin{equation}
 \begin{aligned}
-    &S(x, 0) = 0,\; x \in [0;d),\\
+    &S(x, 0) = 0,\; x \in \Omega_2,\\
     &S(d, 0) = S_0,
 \end{aligned}
 \end{equation}
 
 \begin{equation}
 \begin{aligned}
-    &P(x, 0) = 0,\; x \in [0;d),\\
-    &P(d, 0) = P_0,
+    &P_1(x, 0) = 0,\; x \in \Omega_1,\\
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+    &P_2(x, 0) = 0,\; x \in \Omega_2,\\
+    &P_2(d, 0) = P_0,
 \end{aligned}
 \end{equation}
 
 \begin{equation} 
-    P(0;t)=0, \; t>0.
+    P_1(0;t)=0, \; t>0.
 \end{equation}
 
 \begin{equation} 
@@ -98,7 +112,7 @@ paverčiamas į produktą (P),
 \end{equation}
 
 \begin{equation} 
-    P(d, t) = 0,\; t>0.
+    P_2(d, t) = 0,\; t>0.
 \end{equation}
 
 \subsection{Biosensoriaus atsako charakteristikos}
@@ -111,7 +125,7 @@ paverčiamas į produktą (P),
 \end{equation}
 
 \subsection{Skaitinis lygčių aproksimavimas}
-\subsubsection{Neišreikštinė schema(Implicit Scheme)}
+\subsubsection{Neišreikštinė schema}
 
 \begin{equation}
 \begin{aligned} 
@@ -175,16 +189,16 @@ paverčiamas į produktą (P),
 \left\{
 \begin{aligned}
     &S_{i+1}^{j+1}-S_i^{j+1}\left(1+\frac{h^2}{D\tau}\right)
-        = \frac{h^2}{D\tau} \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai \; i = 1,\\
+= \frac{h^2}{D\tau} \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai \; i = 1,\\
     &\dots\;,\\
     &S_{i-1}^{j+1}-S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+S_{i+1}^{j+1}
         = \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
+        \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
         2,\;...,\;N-1,\\
     &\dots\;,\\
     &S_0 + S_{i-1}^{j+1} - S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
         =  \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; when \; kai i = N.
+    \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai \; i = N.
 \end{aligned}
 \right.
 \end{equation}
@@ -193,16 +207,16 @@ paverčiamas į produktą (P),
 \left\{
 \begin{aligned}
     &P_{i+1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
-        = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_maxS_i^j\tau}{K_M+S_i^j}\right),\; kai \; i = 1,\\
+    = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_{max}S_i^j\tau}{K_M+S_i^j}\right),\; kai \; i = 1,\\
     &\dots\;,\\
     &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+P_{i+1}^{j+1}
         = \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
+    \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i =
         2,\;...,\;N-1,\\
     &\dots\;,\\
     &P_0 + P_{i-1}^{j+1} - P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
         =  \frac{h^2}{D\tau}
-        \left(\frac{V_maxS_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i = N.
+        \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; kai\; i = N.
 \end{aligned}
 \right.
 \end{equation}
