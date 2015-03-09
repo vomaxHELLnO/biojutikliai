@@ -183,22 +183,24 @@ Pagrindinės lygtys ($0<t$):
     \right| < \epsilon \right\}
 \end{aligned}
 \end{equation}
-% 
-% \subsection{Skaitinis lygčių aproksimavimas}
-% \subsubsection{Neišreikštinė schema}
-% 
-% \begin{equation}
-% \begin{aligned} 
-%     &\frac{S_i^{j+1} - S_i^j}{\tau} = D\frac{S_{i+1}^{j+1} -
-%     2S_i^{j+1} + S_{i-1}^{j+1}}{h^2} -
-%     \frac{V_{max} S_i^j}{K_M + S_i^j},\\ 
-%     &\frac{P_i^{j+1} - P_i^j}{\tau} = D\frac{P_{i+1}^{j+1} -
-%     2P_i^{j+1} + P_{i-1}^{j+1}}{h^2} +
-%     \frac{V_{max} S_i^j}{K_M + S_i^j},\\ 
-%     &i = 1,\;...,\; N-1,\; j=0,\;...,\;M-1.
-% \end{aligned}
-% \end{equation}
-% 
+ 
+\subsection{Skaitinis lygčių aproksimavimas}
+\subsubsection{Neišreikštinė schema}
+
+\begin{equation}
+\begin{aligned} 
+    &\frac{S_i^{j+1} - S_i^j}{\tau} = D_S\frac{S_{i+1}^{j+1} -
+    2S_i^{j+1} + S_{i-1}^{j+1}}{h^2} -
+    \frac{V_{max} S_i^j}{K_M + S_i^j},\;i = k,\;...,\;N-1\\ 
+    &\frac{P_i^{j+1} - P_i^j}{\tau} = D_{2P}\frac{P_{i+1}^{j+1} -
+    2P_i^{j+1} + P_{i-1}^{j+1}}{h^2} +
+    \frac{V_{max} S_i^j}{K_M + S_i^j},\;i = k,\;...,\;N-1\\ 
+    &\frac{P_i^{j+1} - P_i^j}{\tau} = D_{1P}\frac{P_{i+1}^{j+1} -
+    2P_i^{j+1} + P_{i-1}^{j+1}}{h^2}, \;i = 1,\;...,\;k-1\\ 
+    &j=0,\;...,\;M-1.
+\end{aligned}
+\end{equation}
+
 % \subsubsection{Pradinės ir kraštinės modelio sąlygos}
 % \begin{equation}
 % \begin{aligned}
@@ -222,13 +224,13 @@ Pagrindinės lygtys ($0<t$):
 %     P_0^j = 0, P_N^j = P_0, j=1,\; ...,\;M, 
 % \end{equation}
 % 
-% \subsubsection{Skaičiavimo procedūra}
-% 
-% \begin{equation} 
-%     i(t_j) \approx t_j = n_eFD_pP_i^j/h,\; j=1,\;...,\;M. 
-% \end{equation}
-% 
-% \subsection{Skaitinio sprendimo tikrinimas}
+\subsubsection{Skaičiavimo procedūra}
+
+\begin{equation} 
+    i(t_j) \approx t_j = n_eFD_pP_i^j/h,\; j=1,\;...,\;M. 
+\end{equation}
+
+\subsection{Skaitinio sprendimo tikrinimas}
 % \subsubsection{Pradinės skaičiavimų sąlygos}
 % 
 % \begin{equation}
@@ -242,44 +244,55 @@ Pagrindinės lygtys ($0<t$):
 % \end{aligned}
 % \end{equation}
 % 
-% \subsubsection{Gautos matricos iš neišreikštinės schemos}
-% \textit{Lygčių sistemos gautos naudojant baigtinių skirtumų medodą ir neišreikštines schemas. Lygtys išsprėstos taikant triįstrižainių matricų algoritmą.}
-% \begin{equation}
-% \left\{
-% \begin{aligned}
-%     &S_{i+1}^{j+1}-S_i^{j+1}\left(1+\frac{h^2}{D\tau}\right)
-% = \frac{h^2}{D\tau} \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i = 1,\\
-%     &\dots\;,\\
-%     &S_{i-1}^{j+1}-S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+S_{i+1}^{j+1}
-%         = \frac{h^2}{D\tau}
-%         \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i =
-%         2,\;...,\;N-1,\\
-%     &\dots\;,\\
-%     &S_0 + S_{i-1}^{j+1} - S_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
-%         =  \frac{h^2}{D\tau}
-%     \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i = N.
-% \end{aligned}
-% \right.
-% \end{equation}
-% 
-% \begin{equation}
-% \left\{
-% \begin{aligned}
-%     &P_{i+1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
-%     = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_{max}S_i^j\tau}{K_M+S_i^j}\right),\; \; i = 1,\\
-%     &\dots\;,\\
-%     &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+P_{i+1}^{j+1}
-%         = \frac{h^2}{D\tau}
-%     \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i =
-%         2,\;...,\;N-1,\\
-%     &\dots\;,\\
-%     &P_0 + P_{i-1}^{j+1} - P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
-%         =  \frac{h^2}{D\tau}
-%         \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i = N.
-% \end{aligned}
-% \right.
-% \end{equation}
-% 
+\subsubsection{Gautos matricos iš neišreikštinės schemos}
+\textit{Lygčių sistemos gautos naudojant baigtinių skirtumų medodą ir neišreikštines
+schemas. Lygtys išsprėstos taikant triįstrižainių matricų algoritmą. Laiko
+žingsnis - $\tau$ (indeksas $j$), erdvės žingsnis - $h$ (indeksas $i$).}
+\begin{equation}
+\left\{
+\begin{aligned}
+    &S_{i+1}^{j+1}-S_i^{j+1}\left(1+\frac{h^2}{D_S\tau}\right)
+= \frac{h^2}{D_S\tau} \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \;
+i = k +1,\\
+    &\dots\;,\\
+    &S_{i-1}^{j+1}-S_i^{j+1}\left(2+\frac{h^2}{D_S\tau}\right)+S_{i+1}^{j+1}
+        = \frac{h^2}{D_S\tau}
+        \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i =
+        k +2,\;...,\;N-1,\\
+    &\dots\;,\\
+    &S_0 + S_{i-1}^{j+1} - S_i^{j+1}\left(2+\frac{h^2}{D_S\tau}\right)
+        =  \frac{h^2}{D_S\tau}
+    \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i = N.
+\end{aligned}
+\right.
+\end{equation}
+
+\begin{equation}
+\left\{
+\begin{aligned}
+%    &P_{i+1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)
+%    = \frac{h^2}{D\tau} \left(-P_i^j -\frac{V_{max}S_i^j\tau}{K_M+S_i^j}\right),\; \; i = 1,\\
+    &P_{i+1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D_{1P}\tau}\right)
+    = -\frac{h^2}{D_{1P}\tau} P_i^j,\; \; i = 1,\\
+    &\dots\;,\\
+%    &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D\tau}\right)+P_{i+1}^{j+1}
+%        = \frac{h^2}{D\tau}
+%    \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-S_i^j\right),\; \; i =
+%        2,\;...,\;k-1,\\
+    &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D_{1P}\tau}\right)+P_{i+1}^{j+1}
+    =-\frac{h^2}{D_{1P}\tau} P_i^j,\; \; i = 2,\;...,\;k,\\
+    &P_{i-1}^{j+1}-P_i^{j+1}\left(2+\frac{h^2}{D_{2P}\tau}\right)+P_{i+1}^{j+1}
+    = \frac{h^2}{D_{2P}\tau}
+    \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-P_i^j\right),\; \; i =
+        k +1,\;...,\;N-1,\\
+    &\dots\;,\\
+    &P_0 + P_{i-1}^{j+1} - P_i^{j+1}\left(2+\frac{h^2}{D_{2P}\tau}\right)
+        =  \frac{h^2}{D_{2P}\tau}
+        \left(\frac{V_{max}S_i^j\tau}{K_M+S_i^j}-P_i^j\right),\; \; i = N.
+\end{aligned}
+\right.
+\end{equation}
+
 % \subsubsection{Rezultatai}
 % 
 % \begin{figure}[H]
