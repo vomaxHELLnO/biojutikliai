@@ -21,7 +21,7 @@ def draw_matrix(substrate, n, label='S, micro M'):
     plt.plot(x, substrate[int(3/tau)], 'b')
     plt.plot(x, substrate[int(5/tau - 1)], 'g')
     plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
-    plt.show()
+  #  plt.show()
 
 def get_current(product):
     return ne*F*Dp*array(product)/h/10**6
@@ -66,7 +66,7 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s D2p
-D1p = 300
+D1p = 500
 #d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 #n = int(d / h + 1) # erdves zingsniu skaicius
@@ -143,9 +143,9 @@ def get_product_matrix(substrate):
                 cl = 1
              #   if n <= n0:
              #       dl = -1 * ((h * h) / (D1p * tau)) * product[i-1][l]
-                if n <= n0:
+                if l <= n0:
                     dl =-1 * ((h * h) / (Dp * tau)) *  product[i-1][l]
-                if n > n0:
+                if l > n0:
                     dl =-1 * ((h * h) / (Dp * tau)) * (((Vmax * substrate[i-1][l-n0] * tau)
                         /(Km + substrate[i-1][l-n0])) + product[i-1][l])
                 coef.append([al, bl, cl, dl])
@@ -177,10 +177,13 @@ if __name__ == '__main__':
     n0 = int(d0 / h + 1)
     substrate = get_substrate_matrix()
     draw_matrix(substrate, n1, 'S, micro M')
+    plt.show()
     n = n1 + n0
     product = get_product_matrix(substrate)
     draw_matrix(product, n, 'P, micro M')
-    exit() 
+    plt.plot([d0/1000., d0/1000.], [0, 0.5], 'm--')
+    plt.show()
+  #  exit() 
    #  print_matrix(product)
     colors = ['m','r','b','g']
     d1lengs = [10, 15, 100, 150]             # fermento sluoksniai
