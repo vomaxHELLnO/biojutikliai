@@ -1,3 +1,4 @@
+# coding: utf-8
 from matplotlib import pyplot as plt
 from numpy import array, arange
 
@@ -35,8 +36,11 @@ def draw_current(product, response_time, label, color):
     plt.yticks(arange(0, 1.2 + 0.1, 0.1))
     # import ipdb; ipdb.set_trace()
     plt.plot(time, get_current(array(product)[0:int(response_time/tau), 1]), color)
-    plt.legend(['d = 0.01mm','d = 0.015mm','d = 0.1mm','d = 0.15mm'],loc = 'upper left')
-    plt.title('Current with T(d = 0.15mm), $\mathbf{\delta}$t = 0.1s, h = 0.1$\mu$m, $\epsilon$ = 0.4')
+    legend = []
+    for k in range(4):
+        legend.append('$d_0$ = ' + str(d0lengs[0]/1000.) + 'mm'+ ', $d_1$ = '+ str(d1lengs[k]/1000.)+'mm')
+    plt.legend(legend, loc = 'upper left')
+    plt.title(u'Srov$ė$ su' + r' T($d_1$ = 0.15mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = 0.4')
     # plt.xlim(0, response_time)
     # plt.show()
 
@@ -173,7 +177,7 @@ def get_T(product, enzyme_width):
 if __name__ == '__main__':
     d1 = 100          #fermento sluoksnis
     n1 = int(d1 / h + 1)
-    d0 = 50           #selektyvios membranos sluoksnis
+    d0 = 10           #selektyvios membranos sluoksnis
     n0 = int(d0 / h + 1)
     substrate = get_substrate_matrix()
     draw_matrix(substrate, n1, 'S, micro M')
@@ -187,11 +191,12 @@ if __name__ == '__main__':
    #  print_matrix(product)
     colors = ['m','r','b','g']
     d1lengs = [10, 15, 100, 150]             # fermento sluoksniai
-    d0lengs = [50]
+    d0lengs = [10]
     for i1, d1 in enumerate(d1lengs):
         for i0, d0 in enumerate(d0lengs):
             n0 = int(d0 / h + 1) # erdves zingsniu skaicius selektyvioj membranoj
-            n = int(d1 / h + 1) # erdves zingsniu skaicius fermente
+            n1 = int(d1 / h + 1) # erdves zingsniu skaicius fermente
+            n = n1 + n0
             substrate = get_substrate_matrix()
             product = get_product_matrix(substrate)
    #     print( product[0][10])
