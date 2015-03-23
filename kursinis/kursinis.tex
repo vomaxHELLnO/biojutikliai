@@ -105,8 +105,8 @@ $\overline{\Omega}_i$, i = 1, 2:
 \end{aligned}
 \end{equation}
 
-Regione $\Omega_1$ vyksta tik produkto
-difuzija, tuo tarpu $\Omega_2$ regione vyksta fermento
+Srityje $\Omega_1$ vyksta tik produkto
+difuzija, tuo tarpu $\Omega_2$ srityje vyksta fermento
 reakcija su substratu ir jų transportavimas taip pat difuzija.
 
 Pagrindinės lygtys ($0<t$):
@@ -175,12 +175,14 @@ Pagrindinės lygtys ($0<t$):
 \subsection{Biojutiklio atsako charakteristikos}
 \subsubsection{Atsako laikas}
 \begin{equation} 
-    i(t) \approx n_eFD_pP/h 
+    \left. i(t) \approx n_eFD_p\frac{\partial P}{\partial x} \right|_{x=0}
 \end{equation}
 \begin{equation} 
 \begin{aligned}
-    T = \underset{i(t)>0}{min}\left\{t:\frac{t}{i(t)} \left| \frac{\partial i(t)}{\partial t}
+    T = \underset{i(t)>0}{min}\left\{t:\frac{t}{i(t)} \left| i'(t)
     \right| < \epsilon \right\}
+    %  T = \underset{i(t)>0}{min}\left\{t:\frac{t}{i(t)} \left| \frac{\partial i(t)}{\partial t}
+    % \right| < \epsilon \right\}
 \end{aligned}
 \end{equation}
  
@@ -231,22 +233,23 @@ Pagrindinės lygtys ($0<t$):
 \end{equation}
 
 \subsection{Skaitinio sprendimo tikrinimas}
-% \subsubsection{Pradinės skaičiavimų sąlygos}
-% 
-% \begin{equation}
-% \begin{aligned}
-%     &S_0 = 1 \mathrm{\mu M},\; P_0 = 0 \mathrm{\mu M},\\
-%     &D_s = 300 \mathrm{\mu m^2/s},\; D_p = 300 \mathrm{\mu m^s/s},\\
-%     &T = 50\mathrm{s},\;\; d_0 = *\ \mathrm{\mu m},\; d_1 = *\ \mathrm{\mu m},\;\\
-%     &\tau = 0.1\mathrm{s},\; h=0.1 \mathrm{\mu m},\\
-%     &V_{max} = 100\mathrm{\mu M /s},\; \epsilon = 0.05,\\
-%     &F=961485,\; K_M= 100\mathrm{\mu M},\; n_e = 2.
-% \end{aligned}
-% \end{equation}
-% 
+\subsubsection{Pradinės skaičiavimų sąlygos}
+ 
+ \begin{equation}
+ \begin{aligned}
+     &S_0 = 1 \mathrm{\mu M},\; P_0 = 0 \mathrm{\mu M},\\
+     &D_s = 300 \mathrm{\mu m^2/s},\; D_{2p} = 300 \mathrm{\mu m^s/s}, D_{1p} = 300 \mathrm{\mu m^s/s},\\\
+     &d_0 = 10\ \mathrm{\mu m},\; d_1 = 10 \mathrm{\mu
+ m},\ 15 \mathrm{\mu m},\ 100 \mathrm{\mu m},\ 150\mathrm{\mu m},\;\\
+     &\tau = 0.1\mathrm{s},\; h=0.1 \mathrm{\mu m},\\
+     &V_{max} = 100\mathrm{\mu M /s},\; \epsilon = 0.05,\\
+     &F=961485,\; K_M= 100\mathrm{\mu M},\; n_e = 2.
+ \end{aligned}
+ \end{equation}
+ 
 \subsubsection{Gautos matricos iš neišreikštinės schemos}
-\textit{Lygčių sistemos gautos naudojant baigtinių skirtumų medodą ir neišreikštines
-schemas. Lygtys išsprėstos taikant triįstrižainių matricų algoritmą. Laiko
+\textit{Lygčių sistemos gautos naudojant baigtinių skirtumų metodą ir neišreikštines
+schemas. Lygtys išspręstos taikant triįstrižainių matricų algoritmą. Laiko
 žingsnis - $\tau$ (indeksas $j$), erdvės žingsnis - $h$ (indeksas $i$).}
 \begin{equation}
 \left\{
@@ -293,8 +296,30 @@ i = k +1,\\
 \right.
 \end{equation}
 
-% \subsubsection{Rezultatai}
-% 
+\subsubsection{Rezultatai}
+ \begin{figure}[H]
+     \centering
+     \includegraphics[scale=0.5]{img/kurS}
+     \caption{Koncentratas $\Omega_2$ srityje}
+     \label{img:mlp}
+ \end{figure}
+ 
+ \begin{figure}[H]
+     \centering
+     \includegraphics[scale=0.5]{img/kurP}
+     \caption{Produktas $\Omega_1$ ir $\Omega_2$ srityse}
+     \label{img:mlp}
+ \end{figure}
+ 
+ \begin{figure}[H]
+     \centering
+     \includegraphics[scale=0.5]{img/kurI}
+     \caption{Srovė, kai $\Omega_1 = d_0$ ir $\Omega_2 = d_1$}
+     \label{img:mlp}
+ \end{figure}
+ 
+\appendix
+ 
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[scale=0.5]{img/S}
