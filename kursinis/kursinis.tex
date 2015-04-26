@@ -27,7 +27,7 @@
 \title{Biojutiklio su selektyvia membrana kompiuterinis modeliavimas}
 % \title{Esama situacija su dviem sluoksniais}
 % \title{Ištirti selektyvios membranos įtaką amperometrinio bijojutiklio jautriui}
-\def\titleineng{Computational modelling of biosensors with selective membranes}
+\def\titleineng{Computational modelling of biosensors with selective membrane}
 \def\statusas{% Kai kurioms katedroms reikia nurodyti  
     4 kurso 1 grupės studentas \\
 }
@@ -63,31 +63,59 @@ kaip biojutiklio rėlė, jis yra padengtas selektyviaja membrana po kurios seka
 imobilizuotas fermentas. Selektyvioji membrana yra naudojama norint padidinti
 biojutiklio selektyvumą \cite{baronas2006computational}. \\
 
+
+*Kam to reikia, ka tai gali suteikti.
+
+*Bus kuriamas modelis, tikrinama, ar galima jį skaitiškai aproksimuoti ir pan.
+
 \section{Biojutiklio su selektyvia membrana modelis}
 %Sudarant modelius bei lygtis buvo pasinaudota šaltiniais:
 %\cite{baronas2009mathematical}, \cite{baronas2006computational},
 %\cite{baronas2003influence}.
 
 \subsection{Matematinis modelis}
-Remiantis supaprastinta schema tirpalas (S) prisijungia prie fermento (E)
-ir yra
-paverčiamas į produktą (P),
-\begin{equation}\label{eq:basic} 
-    S \overset{E}{\rightarrow} P
-\end{equation}
 
-Biojutiklio veikimo sistemos lygiai: tirpalas, fermento sluoksnis($\Omega_2$),
+Supaprastintas amperometrinis biojutiklis su seletyvia membrana turi tris
+pagrindines sudedamąsias dalis: fermento sluoksnis($\Omega_2$),
 selektyvios
-membranos sluoksnis($\Omega_1$), elektrodas.
-
+membranos sluoksnis($\Omega_1$), elektrodas (žr. 1 pav.).
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.9]{img/modv1}
-    \caption{Biosensorio struktūra}
-    \label{img:mlp}
+    \caption{Biojutiklio struktūra}
+    \label{biojutiklio-struktura}
 \end{figure}
 
-Uždaros sritys atvaizduotos pirmame paveiksle:
+Fermento sluoksnyje vyksta grįžtamoji cheminė reakcija, kurios metu (S)
+, kuris supa biojutiklį,
+susijungia su (E), kad suformuotų kompleksą (ES). Susiformavus minėtam
+kompleksui jis pasidalija į reakcijos produktą (P) ir fermentą (E)
+\cite{baronas2009mathematical}.  
+\begin{equation}\label{eq:basic} 
+    S + E \leftrightarrow ES \rightarrow E + P
+\end{equation}
+
+Selektyvios membranos sluoksnis yra skirtas atskirti (P) iš fermento sluoksnyje esančių
+junginių. Dažniausiai tam yra naudojamos kietesnės ir didesnio tankio medžiagos
+nei fermento sluoksnis, todėl selektyvios membranos ir (P) difuzinis
+koeficientas yra mažesnis lyginant su (E) ir (S) arba (E) ir (P) difuziniais
+koeficientais. Taip pat šis sluoksnis gali pagerinti kitas biojutiklio savybes kaip
+tvirtumas, elekrodo ilgaamžiškumas. 
+
+Junginiui (P) difuzijos būdu nukeliavus iki elektrodo įvyksta cheminė reakcija,
+kurios pasakoje junginys (P) yra visiškai suvartojamas ir elektrode susidaro
+elektros srovė. Daroma prielaida, kad šios reakcijos metu nesusidaro šalutiniai
+produktai ir elektrodas nesidevi.
+
+Remiantis supaprastinta schema tirpalas (S) prisijungia prie fermento (E)
+ir yra
+paverčiamas į produktą (P),
+\begin{equation}\label{eq:basic}
+    S \overset{E}{\rightarrow} P
+\end{equation}
+
+Uždaros sritys, kurios atitinka fermento ir selektyvios
+membranos sluoksnius, atvaizduotos \ref{biojutiklio-struktura} pav.:
 \begin{equation}
 \begin{aligned}
     &\overline{\Omega}_1 = [0, d_0],\\
@@ -97,7 +125,6 @@ Uždaros sritys atvaizduotos pirmame paveiksle:
 
 Tegu $\Omega_i$ yra atviros sritys atitinkačios uždarus regionus
 $\overline{\Omega}_i$, i = 1, 2:
-
 \begin{equation}
 \begin{aligned}
     &\Omega_1 = (0, d_0),\\
@@ -109,23 +136,36 @@ Srityje $\Omega_1$ vyksta tik produkto
 difuzija, tuo tarpu $\Omega_2$ srityje vyksta fermento
 reakcija su substratu ir jų transportavimas taip pat difuzija.
 
-Pagrindinės lygtys ($0<t$):
-\begin{equation}
-    \frac{\partial P_1}{\partial t} = D_{1P} \frac{\partial^2 P_1}{\partial x^2}, \;
-    \; x \in \Omega_1,\;\; t > 0.
-\end{equation}
-
+Apjungus fermento katalizuojamą reakciją fermento sluoksnyje su reakcijos
+produkto (P) difuzija selektyviojoje membranoje ir su vienos
+dimensijos erdvėje difuzija, kuri yra apibrėžta Ficko dėsniu, gautos šios
+esminės lygtys ($0<t$):
 \begin{equation}
 \begin{aligned} 
+    \label{eq:mat-modelis}
+    &\frac{\partial P_1}{\partial t} = D_{1P} \frac{\partial^2 P_1}{\partial x^2}, \;
+    \; x \in \Omega_1,\\
     &\frac{\partial S}{\partial t} = D_S \frac{\partial^2 S}{\partial x^2} -
     \frac{V_{max} S}{K_M + S},  \\ 
     &\frac{\partial P_2}{\partial t} = D_{2P} \frac{\partial^2 P_2}{\partial x^2} +
-    \frac{V_{max} S}{K_M + S}, \; \; x \in \Omega_2 ,\;\; t > 0.
+    \frac{V_{max} S}{K_M + S}, \; \; x \in \Omega_2 ,\;\; t > 0.\\
 \end{aligned}
 \end{equation}
 
+Lygčių sistemoje (\ref{eq:mat-modelis}) x atitinka erdvę, o t – laiką, S(x, t)
+yra koncentrato koncentracija, o P(x, t) yra reakcijos produkto koncentracija,
+$\Omega_1$ – selektyvios membranos storis, $\Omega_2$ – fermento sluoksnio
+storis, $V_{max}$ – maksimalus fermentacinis greitis, $ D_{1P}$, $ D_{2P}$, $ D_S$ - difuziniai medžiagų koeficientai, t - laikas nuo
+simuliacijos pradžios, $ K_M$ - Michaelio konstanta. Michaelio konstanta $K_M$
+nusako su kokios koncentracijos koncentratu yra pasiekiama pusė maksimalaus
+reakcijos, kuri katalizuojama fermento, greičio.
 
 \subsection{Pradinės ir kraštinės sąlygos}
+Tegu x = 0 yra elektrodo paviršius, x = $d_1$ – riba tarp analizuojamo
+tirpalo ir fermento membranos, o x = $d_0$ – riba tarp selektyviosios membranos
+ir fermento sluoksnio. Iš pradžių nei (S) nei (P) nėra biosensorio
+dalyse. Matavimai pradedami, kai koncentratas atsiduria ant fermento membranos
+paviršiaus. Pradinėmis salygomis (t = 0) tikimasi:
 \begin{equation}
 \begin{aligned}
     &S(0,0) = 0, \\
@@ -142,41 +182,79 @@ Pagrindinės lygtys ($0<t$):
 
 \begin{equation}
 \begin{aligned}
-    & P_2(x, 0) = 0,\; x \in \Omega_2%,\\
-%    &P_2(d_1, 0) = P_0
+    &P_2(x, 0) = 0,\; x \in \overline\Omega_2,\\
+    &P_2(d_1, 0) = P_0.
 \end{aligned}
 \end{equation}
 
-\begin{equation} 
-    P_1(0,t)=0, \; t>0.
-\end{equation}
-
-%\begin{equation} 
-%    \left. D_S \frac{\partial S}{\partial x} \right|_{x=d_0} = 0, t>0.
-%\end{equation}
-
+$S_0$ ir $P_0$ yra (S) ir (P) koncentracijos tiriamame tirpale. Dažniausiai
+daroma prielaida, kad reakcijos produkto koncentracija tirpal yra lygi nuliui:
+$P_0 = 0$. Taip pat, jeigu mišinys yra maišomas ir difuzijos sluoksnis (0 < x <
+$d_1$) išlieka konstanta, daroma prielaida, kad fermento membranos paviršiuje
+(x = $d_1$) substrato ir produkto koncentracijos išlieka konstanta. Iš to gauname fermento sluoksnio paviršiaus (x = $d_1$) kraštines salygas:
 \begin{equation} 
     S(d_1, t) = S_0,\; t>0,
 \end{equation}
 
 \begin{equation} 
-    P_2(d_1, t) = 0,\; t>0.
+    P_2(d_1, t) = P_0 = 0,\; t>0.
 \end{equation}
 
+Reakcijos produkto koncentracija ant elektrodo paviršiaus (x = 0) visada
+laikoma lygi nuliui dėl elektrodo poliarizacijos:
+\begin{equation} 
+    P_1(0,t)=0, \; t>0.
+\end{equation}
+
+Ant selektyviosios membranos paviršiaus (x = $d_0$) (S) nereguoja ir neprasiskverbia į
+selektyviąją membraną, o (P) atvirkščiai – toliau skverbiasi link elektrodo
+difuzijos pagalba. Nepaisant difuzijos koficientų ir kitų skirtumų tarp selektyvios ir
+fermento membranų sluoksnių daroma prielaida, kad jų susilietimo taške abiejose
+pusėse (P) koncentracija yra ta pati: P($\underset{y \to 0}{lim}(d_0 + y)$, t) =
+P($\underset{y \to 0}{lim}(d_0 - y)$, t)  , iš to seka kraštinės sąlygos:
+%\begin{equation} 
+%    \left. D_S \frac{\partial S}{\partial x} \right|_{x=d_0} = 0, t>0.
+%\end{equation}
 \begin{equation} 
 \begin{aligned}
-    \left. \frac{\partial S}{\partial x} \right|_{x=d_0} = 0, \;\;
+    \left. D_S \frac{\partial S}{\partial x} \right|_{x=d_0} = 0, \;\;
     & \left. D_{1P} \frac{\partial P_1}{\partial x} \right|_{x=d_0} = 
     \left. D_{2P} \frac{\partial P_2}{\partial x} \right|_{x=d_0},\; t > 0 \\
     & P_1(d_0, t) = P_2(d_0, t),\; t>0.
 \end{aligned}
 \end{equation}
 
-\subsection{Biojutiklio atsako charakteristikos}
-\subsubsection{Atsako laikas}
-\begin{equation} 
-    \left. i(t) \approx n_eFD_p\frac{\partial P}{\partial x} \right|_{x=0}
+\section{Biojutiklio atsako charakteristikos}
+\subsection{Biojutiklio srovė}
+
+Fizikiniuose eksperimentuose išmatuota elektros srovė yra priimtinas
+biojutiklio atsako kriterijus. Srovė yra tiesiogiai proporcinga elektrodo
+plodui ir priklauso nuo elektroaktyvių medžiagų (P)
+kiekio prie elektrodo paviršiaus (x = 0). Remiantis vienos dimensijos modeliu
+ir pritaikius Faradėjaus ir Ficko dėsnius srovė dali būti apskaičiuota
+remiantis formule:
+\begin{equation}
+    \label{eq:srove}
+    \left. i(t) \approx n_eFD_{1P}\frac{\partial P}{\partial x} \right|_{x=0}.
 \end{equation}
+
+Formulėje (\ref{eq:srove}) $n_e$ yra elektronų skaičius, kurie dalyvavo srovės
+keitime, F yra Faradėjaus konstanta, F = 96,485 C/mol.
+
+Laikui artėjant į begalybę sistema įgauna pastobų būvį. I paimta, kaip jo
+srovės rodiklis:
+\begin{equation}
+    I = \underset{t \to \infty}{lim} \ i(t)
+\end{equation}
+
+\subsection{Biojutiklio atsako laikas}
+
+Laiko intervalas nuo vyksmo pradžios iki srovės išmatavimo momento yra
+vadinamas biojutiklio atsako laiku. Amperometrinių biojutiklių, kurių modulis
+yra stacionarus, atsako laikui išmatuoti dažniausiai naudojamas laikas, kurio
+prireikia, kad srovės pokytis per nusistatytą laiko intervalą neviršytų
+nusistatytos srovės vertės pokyčio. T – laikas, kurio reikia, kad pasiekti
+mažesnį srovės pokyčio greitį, nei nusistatysasis $\epsilon$:
 \begin{equation} 
 \begin{aligned}
     T = \underset{i(t)>0}{min}\left\{t:\frac{t}{i(t)} \left| i'(t)
@@ -185,9 +263,14 @@ Pagrindinės lygtys ($0<t$):
     % \right| < \epsilon \right\}
 \end{aligned}
 \end{equation}
+
+Tačiau atsako laikas T, kaip apytikslis laikas biojutiklio pastovaus laiko
+įvertis, yra labai jautrus nusistatytam neviršijamam srovės pokyčio greičiui
+$\epsilon$, kai $\epsilon \to 0$, tada $T \to \infty$. Todėl yra naudojamas
+dalinai pastovios srovės laikas.  
  
-\subsection{Skaitinis lygčių aproksimavimas}
-\subsubsection{Neišreikštinė schema}
+\section{Biojutiklio matematinio modelio skaitinis aproksimavimas}
+\subsection{Neišreikštinė schema}
 
 \begin{equation}
 \begin{aligned} 
@@ -226,14 +309,14 @@ Pagrindinės lygtys ($0<t$):
 %     P_0^j = 0, P_N^j = P_0, j=1,\; ...,\;M, 
 % \end{equation}
 % 
-\subsubsection{Skaičiavimo procedūra}
+\subsection{Skaičiavimo procedūra}
 
 \begin{equation} 
     i(t_j) \approx t_j = n_eFD_pP_i^j/h,\; j=1,\;...,\;M. 
 \end{equation}
 
-\subsection{Skaitinio sprendimo tikrinimas}
-\subsubsection{Pradinės skaičiavimų sąlygos}
+\section{Skaitinio sprendimo tikrinimas}
+\subsection{Pradinės skaičiavimų sąlygos}
  
  \begin{equation}
  \begin{aligned}
@@ -247,7 +330,7 @@ Pagrindinės lygtys ($0<t$):
  \end{aligned}
  \end{equation}
  
-\subsubsection{Gautos matricos iš neišreikštinės schemos}
+\subsection{Gautos matricos iš neišreikštinės schemos}
 \textit{Lygčių sistemos gautos naudojant baigtinių skirtumų metodą ir neišreikštines
 schemas. Lygtys išspręstos taikant triįstrižainių matricų algoritmą. Laiko
 žingsnis - $\tau$ (indeksas $j$), erdvės žingsnis - $h$ (indeksas $i$).}
@@ -296,7 +379,7 @@ i = k +1,\\
 \right.
 \end{equation}
 
-\subsubsection{Rezultatai}
+\subsection{Rezultatai}
  \begin{figure}[H]
      \centering
      \includegraphics[scale=0.5]{img/kurS}
@@ -317,8 +400,19 @@ i = k +1,\\
      \caption{Srovė, kai $\Omega_1 = d_0$ ir $\Omega_2 = d_1$}
      \label{img:mlp}
  \end{figure}
- 
-\appendix
+
+\sectionnonum{Rezultatai ir išvados} 
+Remiantis barono knyga buvo sudarytas matematinis modelis
+
+Pasiulytas matematinio modelio skaitinis aproksimavimo metodas
+pasiulytas skaitinio aproksimavimo medotas istestuotas
+Programisai realizuotas pasiulytasis skaitinio aproksimavimo metodas
+Patikrintas pasiulytasis skaitinio aproskimavimo metodas
+
+Ateities darbai: galima nustatyti optimalias biojutiklio parametrus konkretiems
+tirpalams; Praplesti matematini modeli, kad jis tenkintu platesnes salygas.
+
+%\appendix
  
 % \begin{figure}[H]
 %     \centering
