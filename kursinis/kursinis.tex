@@ -68,7 +68,7 @@ yra elektrodas ir fermento sluoksnis, charakteristikomis. Joms bus adaptuota
 selektyvioji membrana: sudarytas amperometrinio biojutiklio su selektyvia
 membrana matematinis modelis, sumodeliuotos jo atsako charakteristikos, bus
 išvestas biojutiklio matematinio modelio skaitinės aproksimacijos ir atlikta
-biojutiklios veikimo simuliacija naudojantis parašyta programa.
+biojutiklio veikimo simuliacija naudojantis parašyta programa.
 
 Tai įgyvendinus bus galima tirti selektyvios membranos įtaką biojutiklio
 atsakui, apskaičiuoti optimalų selektyvios membranos arba fermento sluoksnio
@@ -218,8 +218,8 @@ Ant selektyviosios membranos paviršiaus ($x = d_0$) (S) nereguoja ir neprasiskv
 selektyviąją membraną, o (P) atvirkščiai – toliau skverbiasi link elektrodo
 difuzijos pagalba. Nepaisant difuzijos koeficientų ir kitų skirtumų tarp selektyvios ir
 fermento membranų sluoksnių daroma prielaida, kad jų susilietimo taške abiejose
-pusėse (P) koncentracija yra ta pati: $P_1$($\underset{y \to 0}{lim}(d_0 + y)$, t) =
-$P_0$($\underset{y \to 0}{lim}(d_0 - y)$, t)  , iš to seka kraštinės sąlygos:
+pusėse (P) koncentracija yra ta pati: $P_1$($\underset{y \to 0}{lim}(d_0 + y), t)$ =
+$P_0$($\underset{y \to 0}{lim}(d_0 - y), t)$, kai $y > 0$  , iš to seka kraštinės sąlygos:
 %\begin{equation} 
 %    \left. D_S \frac{\partial S}{\partial x} \right|_{x=d_0} = 0, t>0.
 %\end{equation}
@@ -294,7 +294,7 @@ vertinant biojutiklio veikimo dinamiką:
 \end{equation}
 
 Laikai $T_{0.9}$ ir $T_{0.95}$, kurių atitinkamai reikia pasiekti $90\%$ ir $95\%$
-pastovios biojutiklio srovės dalis, yra taip pat palyginus dažnai naudojami
+pastovios biojutiklio srovės dalies, yra taip pat palyginus dažnai naudojami
 kaip biojutiklio atsako laikai, $i^*(T_{0.9}) = 0.9$, $i^*(T_{0.95}) = 0.95$. 
 
 \section{Biojutiklio matematinio modelio skaitinis aproksimavimas}
@@ -313,8 +313,7 @@ diskretus tinklelis:
     &w_{\tau} = \{t_j : t_j = j \tau, j = 0, 1, ..., M;\ \tau M = T\}
 \end{aligned}
 \end{equation}
-
-kur $w_h$ ir $w_{\tau}$ yra erdvės ir laiko vientisi diskretųs tinkleliai.
+kur $w_h$ ir $w_{\tau}$ yra erdvės ir laiko vientisi diskretūs tinkleliai.
 
 Šie pasižymėjimai bus naudojami baigtinių skirtumų aproksimavime:
 
@@ -461,11 +460,13 @@ vertė:
 
 Skaičiavimuose sėkmingai gali būti naudojama $\epsilon = 10^{-2}$ vertė. 
 
-Norint programiškai susimuliuoti amperometrinio bijojutiklio su selektyvia
+Norint programiškai susimuliuoti amperometrinio biojutiklio su selektyvia
 membrana veikimą reikėjo sukurti programą, kurioje būtų realizuoti lygčių
 (\ref{eq:S}) - (\ref{eq:skT}) sprendimai. Kompiuterinę programą, kuri yra
-parašyta Python programavimo kalba ir  geba išspresti šias
-lygtis, galima rasti priede \ref{programa}.
+parašyta Python programavimo kalba ir geba išspręsti šias
+lygtis, galima rasti priede \ref{programa}. Programos modelis pavaizduotas
+žemiau paveiksle nr.
+\ref{img:progsis}.
 
 Programą sudaryta iš trijų pagrindinių dalių: substrato (S) koncentracijos
 apskaičiavimas visuose apsibėžtuose erdvės ir laiko žingsniuose, reakcijos
@@ -473,18 +474,20 @@ produkto (P) koncentracijos
 apskaičiavimas visuose apsibėžtuose erdvės ir laiko žingsniuose, biojutiklio
 srovės apskaičiavimas visuose apsibrėžtuose laiko žingsniuose.
 
-Substrato (S) ir produkto (P) skaičiavimai sudaryti iš dviejų pagrindinių
-dalių: kiekvienam laiko žingsniui $t_j$  sudarytos triįstrižainės matricos su
+Substrato (S) ir produkto (P) skaičiavimai susideda iš
+: kiekvienam laiko žingsniui $t_j$  sudarytos triįstrižainės matricos su
 atitinkamos lygčių sistemos kintamųjų koeficientais, matricai pritaikius
 perkelties metodą apskaičiuojamos koncentracijų skaitinės vertės.
 
 Biojutiklio srovė apskaičiuojama remiantis (P) koncentracija prie elektrodo
 skirtingais laiko momentais $P^j_1$.
-
-Supaprastingas programos veikimo ir jos funkcijų priklausomybių modelis atrodo
-taip:
-
-
+ \begin{figure}[H]
+     \centering
+     \includegraphics[scale=0.7]{img/progsis}
+     \caption{Supaprastintas programos veikimo ir jos funkcijų priklausomybių
+     modelis}
+     \label{img:progsis}
+ \end{figure}
 
 \section{Skaitinio sprendimo tikrinimas}
 \subsection{Pradinės skaičiavimų sąlygos}
