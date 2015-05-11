@@ -38,9 +38,9 @@ def draw_current(product, response_time, label, color):
     plt.plot(time, get_current(array(product)[0:int(response_time/tau), 1]), color)
     legend = []
     for k in range(4):
-        legend.append('$d_0$ = ' + str(d0lengs[0]/1000.) + 'mm'+ ', $d_1$ = '+ str(d1lengs[k]/1000.)+'mm')
+        legend.append('$d_0$ = ' + str(d0lengs[0]/1000.) + 'mm'+ ', $d_1$ = '+ str((d1lengs[k]+d0lengs[0])/1000.)+'mm')
     plt.legend(legend, loc = 'upper left')
-    plt.title(u'Srov$ė$ su' + r' T($d_1$ = 0.15mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = 0.4')
+    plt.title(u'Srov$ė$ su' + r' T($d_1$ =' + str(d1lengs[3] + d0lengs[0]) + 'mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = '+ str(epsilon))
     # plt.xlim(0, response_time)
     # plt.show()
 
@@ -70,7 +70,7 @@ ne = 2
 F = 96485 # faradejaus konstanta
 Ds = 300 # 300 micro m^2/s
 Dp = 300 # 300 micro m^2/s D2p
-D1p = 500
+D1p = 200
 #d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 #n = int(d / h + 1) # erdves zingsniu skaicius
@@ -79,7 +79,7 @@ Vmax = 100 #100 microM/s
 tau = 0.1 # delta time
 T = 50 # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
-epsilon = 0.40
+epsilon = 0.10
 #I = ne*F*Vmax*d/2 #max i, (59) knygos formule
 
 def get_substrate_matrix():
@@ -148,7 +148,7 @@ def get_product_matrix(substrate):
              #   if n <= n0:
              #       dl = -1 * ((h * h) / (D1p * tau)) * product[i-1][l]
                 if l <= n0:
-                    dl =-1 * ((h * h) / (Dp * tau)) *  product[i-1][l]
+                    dl =-1 * ((h * h) / (D1p * tau)) *  product[i-1][l]
                 if l > n0:
                     dl =-1 * ((h * h) / (Dp * tau)) * (((Vmax * substrate[i-1][l-n0] * tau)
                         /(Km + substrate[i-1][l-n0])) + product[i-1][l])
