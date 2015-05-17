@@ -40,7 +40,7 @@ def draw_current(product, response_time, label, color):
     for k in range(4):
         legend.append('$d_0$ = ' + str(d0lengs[0]/1000.) + 'mm'+ ', $d_1$ = '+ str((d1lengs[k]+d0lengs[0])/1000.)+'mm')
     plt.legend(legend, loc = 'upper left')
-    plt.title(u'Srov$ė$ su' + r' T($d_1$ =' + str(d1lengs[3] + d0lengs[0]) + 'mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = '+ str(epsilon))
+    plt.title(u'Srov$ė$ su' + r' T($d_1$ =' + str(d1lengs[3] + d0lengs[0]) + r'mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = '+ str(epsilon))
     # plt.xlim(0, response_time)
     # plt.show()
 
@@ -68,16 +68,16 @@ P0 = 0 #
 ne = 2
 #N = ~200, 1% paklaida, 303p del laiko
 F = 96485 # faradejaus konstanta
-Ds = 300 # 300 micro m^2/s
-Dp = 300 # 300 micro m^2/s D2p
-D1p = 200
+Ds = 300. # 300 micro m^2/s
+Dp = 300. # 300 micro m^2/s D2p
+D1p = 1000.
 #d = 100 # 0.1 mm maksimalus fermento membranos sluoksnis
 h = 0.1 # x kitimo zingsnis x in [0;d]
 #n = int(d / h + 1) # erdves zingsniu skaicius
-Km = 100 #100 microM
-Vmax = 100 #100 microM/s
+Km = 100. #100 microM
+Vmax = 100. #100 microM/s
 tau = 0.1 # delta time
-T = 50 # maksimalus stebejimo laikas
+T = 100. # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
 epsilon = 0.10
 #I = ne*F*Vmax*d/2 #max i, (59) knygos formule
@@ -134,8 +134,9 @@ def get_product_matrix(substrate):
                 product[i][j] = P0
         if i != 0:
             coef_c = (h * h) / (tau * Dp)
+            coef_d = (h * h) / (tau * D1p)
             coef = []
-            b1 = -2 - coef_c
+            b1 = -2 - coef_d
             c1 = 1
             d1 = -1 * ((h * h) / (D1p * tau)) * product[i-1][1]
           #  d1 = -1 * ((h * h) / (Dp * tau)) * (((Vmax * substrate[i-1][1] * tau) / 
@@ -143,13 +144,14 @@ def get_product_matrix(substrate):
             coef.append([b1,c1,d1])
             for l in range(1, n - 1):
                 al = 1
-                bl = -2 - coef_c
                 cl = 1
              #   if n <= n0:
              #       dl = -1 * ((h * h) / (D1p * tau)) * product[i-1][l]
                 if l <= n0:
+                    bl = -2 - coef_d
                     dl =-1 * ((h * h) / (D1p * tau)) *  product[i-1][l]
                 if l > n0:
+                    bl = -2 - coef_c
                     dl =-1 * ((h * h) / (Dp * tau)) * (((Vmax * substrate[i-1][l-n0] * tau)
                         /(Km + substrate[i-1][l-n0])) + product[i-1][l])
                 coef.append([al, bl, cl, dl])
@@ -177,7 +179,7 @@ def get_T(product, enzyme_width):
 if __name__ == '__main__':
     d1 = 100          #fermento sluoksnis
     n1 = int(d1 / h + 1)
-    d0 = 10           #selektyvios membranos sluoksnis
+    d0 = 20           #selektyvios membranos sluoksnis
     n0 = int(d0 / h + 1)
     substrate = get_substrate_matrix()
     draw_matrix(substrate, n1, 'S, micro M')
@@ -191,7 +193,7 @@ if __name__ == '__main__':
    #  print_matrix(product)
     colors = ['m','r','b','g']
     d1lengs = [10, 15, 100, 150]             # fermento sluoksniai
-    d0lengs = [10]
+    d0lengs = [20]
     for i1, d1 in enumerate(d1lengs):
         for i0, d0 in enumerate(d0lengs):
             n0 = int(d0 / h + 1) # erdves zingsniu skaicius selektyvioj membranoj
