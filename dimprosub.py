@@ -11,36 +11,67 @@ def print_matrix(matrix):
     for i, row in enumerate(matrix):
         print str(i*tau)+'s', ' '.join(['%.4f' % e for e in row])
 
-def draw_matrix(substrate, n, label='S, micro M'):
-    x = [i*h/1000. for i in range(n)]
-    plt.xlabel('x, mm')
-    plt.ylabel(label)
-    plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
-    plt.yticks(arange(0, 1 + 0.1, 0.1))
-    plt.plot(x, substrate[int(0.5/tau)], 'm')
-    plt.plot(x, substrate[int(1/tau)], 'r')
-    plt.plot(x, substrate[int(3/tau)], 'b')
-    plt.plot(x, substrate[int(5/tau - 1)], 'g')
+def draw_matrix(substrate, n, label='S, micro M', dim=1):
+    #x = [i*h/1000. for i in range(n)]
+    plt.xlim([0, 1])
+    if label == 'S, micro M':
+        x = [(i*h + d0) / dim for i in range(n)]
+        plt.plot(x, substrate[int(0.5/tau)], 'm')
+        plt.plot(x, substrate[int(1/tau)], 'r')
+        plt.plot(x, substrate[int(3/tau)], 'b')
+        plt.plot(x, substrate[int(5/tau - 1)], 'g')
+        plt.ylabel('$\hat{S}$')
+    if label == 'P, micro M':
+        x = [i*h/(dim) for i in range(n)]
+        plt.plot(x, substrate[int(0.5/tau)], 'm')
+        plt.plot(x, substrate[int(1/tau)], 'r')
+        plt.plot(x, substrate[int(3/tau)], 'b')
+        plt.plot(x, substrate[int(5/tau - 1)], 'g')
+        plt.ylabel('$\hat{P}$')
+    plt.xlabel('$\hat{x}$')
+    #plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
+    #plt.xticks(arange(min(x), max(x)+ (0.01), 0.01))
+    #plt.yticks(arange(0, 1 + 0.1, 0.1))
     plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
   #  plt.show()
 
 def get_current(product):
     return ne*F*Dp*array(product)/h/10**6
 
+def draw_T05_d0(srove):
+    plt.plot([e[0] for e in srove], [e[1] for e in srove],'bo')
+    plt.xlabel('$d_0 / (d_1 - d_0)$')
+    plt.ylabel('$i$')
+    plt.show()
+    plt.plot([e[0] for e in srove], [e[2] for e in srove],'bo')
+    plt.xlabel('$d_0 / (d_1 - d_0)$')
+    plt.ylabel('$T_{0.5}$')
+    plt.show()
+
+def draw_dif_d0(srove):
+    plt.plot([e[0] for e in srove], [e[1] for e in srove], 'bo')
+    plt.xlabel('$D_{1P} / D_{2P}$')
+    plt.ylabel('$i$')
+    plt.show()
+    plt.plot([e[0] for e in srove], [e[2] for e in srove],'bo')
+    plt.xlabel('$D_{1P} / D_{2P}$')
+    plt.ylabel('$T_{0.5}$')
+    plt.show()
+
 def draw_current(product, response_time, label, color):
     # time = [tau*i for i in range(m)]
-    time = [tau * i for i in range(int(response_time/h))]
-    plt.xlabel('t, s')
+    time = [((tau * i) * Ds /((d0 + d2) *(d0 + d2))) for i in range(int(response_time/h))]
+    plt.xlabel('$\hat{t}$')
     plt.ylabel(label)
-    plt.xticks(arange(min(time), max(time)+ (0.01), 1))
-    plt.yticks(arange(0, 1.2 + 0.1, 0.1))
+    #plt.xticks(arange(min(time), max(time)+ (0.01), 1))
+    #plt.yticks(arange(0, 1.2 + 0.1, 0.1))
     # import ipdb; ipdb.set_trace()
     plt.plot(time, get_current(array(product)[0:int(response_time/tau), 1]), color)
     legend = []
     for k in range(4):
         legend.append('$d_0$ = ' + str(d0lengs[0]/1000.) + 'mm'+ ', $d_1$ = '+ str((d1lengs[k]+d0lengs[0])/1000.)+'mm')
     plt.legend(legend, loc = 'upper left')
-    plt.title(u'Srov$ė$ su' + r' T($d_1$ =' + str(d1lengs[3] + d0lengs[0]) + r'mm), $\mathbf{\tau}$ = 0.1s, h = 0.1$\mu$m, $\epsilon$ = '+ str(epsilon))
+    plt.title(u'Srov$ė$, su ' + r' T($d_1$ =' + str(d1lengs[3] + d0lengs[0]) + r'mm), $\epsilon$ = '+ str(epsilon))
     # plt.xlim(0, response_time)
     # plt.show()
 
@@ -77,19 +108,20 @@ h = 0.1 # x kitimo zingsnis x in [0;d]
 Km = 100. #100 microM
 Vmax = 100. #100 microM/s
 tau = 0.1 # delta time
-T = 100. # maksimalus stebejimo laikas
+T = 80. # maksimalus stebejimo laikas
 m = int(T / tau)#laiko zingsniu skaicius
 epsilon = 0.10
-d1 = 100          #fermento sluoksnis
-n1 = int(d1 / h + 1)
-d0 = 20           #selektyvios membranos sluoksnis
-n0 = int(d0 / h + 1)
+d1 = 100.          #fermento sluoksnis
+d2 = 100.
+n1 = int(d1 / h)
+d0 = 20.           #selektyvios membranos sluoksnis
+n0 = int(d0 / h)
 d1lengs = [10, 15, 100, 150]             # fermento sluoksniai
 d0lengs = [20]
 #I = ne*F*Vmax*d/2 #max i, (59) knygos formule
 #Bedimensio modelio parametrai
 hatx = 0.01
-hatt = (Ds * T) / (d * d)
+hatt = (Ds * T) / (1 * 1)
 h1x = d1/h
 hd1lengs = list(array(d1lengs) / h)
 hd0lengs = d0 / h
@@ -137,7 +169,7 @@ def get_substrate_matrix():
                 substrate[i][k] = X[k - 1]
     return substrate
 
-def get_product_matrix(substrate):
+def get_product_matrix(substrate, n, n0, D1p):
     product = []
     for i in range(m):
         product.append([])
@@ -187,37 +219,140 @@ def get_T(product, enzyme_width):
     time = 0
     i1 = get_current(array(product)[:, 1])
     for t in range(int(T/tau)):
-        if time == 0 and (t*tau) > 2:
+        if time == 0 and (t*tau) > 1.:
             if ((t*tau)/i1[t])*abs((i1[t]-i1[t-1])/((t*tau)-((t-1)*tau))) < epsilon:
                 time = t * tau # t- laiko zingsnis
     return time
 
+
+def get_T05(product, T_, d):
+    time = 0
+    i1 = get_current(array(product)[:, 1])
+    for t in range(int(T_/tau)):
+        if time == 0:
+            if (i1[t]/i1[(T_/tau)-1]) > 0.5:
+                time = (t * tau * Ds) / (d * d)  # t- laiko zingsnis
+    return time
+
+def get_Dep_T05_d0(substrate_):
+    '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
+    selektyvios membranos storio pagal apsibreztus parametrus'''
+    intervalo_daznis = 40.
+    hatd0_intervalas = 2.
+    zingsnio_dydis = hatd0_intervalas / intervalo_daznis
+    srove = []
+    for t in range(int(intervalo_daznis)):
+        n0 = int((zingsnio_dydis + (zingsnio_dydis * t))*d1/h)
+        n = n0 + n1
+        product_ = get_product_matrix(substrate_, n, n0, 1000)
+        T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
+        T05_ = get_T05(product_, T_, (n0 + n1) * h)
+        # TODO hati
+        current_ = get_current(product_[int(T_ / h)][1] / Km)
+        srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
+    
+    return srove
+
+def get_Dep_dif_d0(substrate_):
+    '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
+    selektyvios membranos storio pagal apsibreztus parametrus'''
+    intervalo_daznis = 40.
+    hatd0_intervalas = 1.
+    zingsnio_dydis = hatd0_intervalas / intervalo_daznis
+    srove = []
+    for t in range(int(intervalo_daznis)):
+        D1p = int((zingsnio_dydis + (zingsnio_dydis * t))*Ds)
+        product_ = get_product_matrix(substrate_, 1200, 200, D1p)
+        T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
+        T05_ = get_T05(product_, T_, 1200)
+        # TODO hati
+        current_ = get_current(product_[int(T_ / h)][1] / Km)
+        srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
+    return srove
+
 if __name__ == '__main__':
     substrate = get_substrate_matrix()
-    draw_matrix(substrate, n1, 'S, micro M')
-    
-    plt.show()
-    n = n1 + n0
-    product = get_product_matrix(substrate)
-    draw_matrix(product, n, 'P, micro M')
-    plt.plot([d0/1000., d0/1000.], [0, 0.5], 'm--')
-    plt.show()
-  #  exit() 
-   #  print_matrix(product)
+  #  draw_matrix(substrate, n1, 'S, micro M')
+  #  plt.show()
+    # n = n1 + n0
+    # product = get_product_matrix(substrate, n, n0, D1p)
+    # hatsubstrate = list(array(substrate) / Km)
+    # hatproduct = list(array(product) / Km)
+   # draw_matrix(product, n, 'P, micro M')
+   # plt.plot([d0/1000., d0/1000.], [0, 0.5], 'm--')
+    # draw_matrix(hatsubstrate, n1, 'S, micro M', (d0 + d1))
+    # plt.plot([d0 / (d0+d1),d0 / (d0+d1)], [0, d0 / (d0+d1)/16], 'm--')
+    # plt.show()
+    # draw_matrix(hatproduct, n, 'P, micro M', (d0 + d1))
+    # plt.plot([d0 / (d0+d1),d0 / (d0+d1)], [0, d0 / (d0+d1)/35], 'm--')
+    # plt.show()
+
+    #draw_T05_d0(get_Dep_T05_d0(substrate))
+    draw_dif_d0(get_Dep_dif_d0(substrate))
+   # exit()
+   # print_matrix(product)
     colors = ['m','r','b','g']
-   for i1, d1 in enumerate(d1lengs):
+    for i1, d1 in enumerate(d1lengs):
         for i0, d0 in enumerate(d0lengs):
             n0 = int(d0 / h + 1) # erdves zingsniu skaicius selektyvioj membranoj
             n1 = int(d1 / h + 1) # erdves zingsniu skaicius fermente
             n = n1 + n0
             substrate = get_substrate_matrix()
-            product = get_product_matrix(substrate)
+            product = get_product_matrix(substrate, n, n0, D1p)
    #     print( product[0][10])
    #     print( product[1][10])
    #     print( product[2][10])
    #     print( product[3][10])
             draw_current(product, T, 'i, nA/mm$^2$', colors[i1])
-    T_response = get_T(product, 50)
+    hatt = Ds /((d0 + d2) *(d0 + d2))
+   # T_{0.5} (d_0)
+   # pasipildyti modeli hat d_0=d_1/d_0 ir hat i
+   #+ getT papildyti T_{05}
+   # apskaiciuoti T_{05} bedimensiniame modelyje dugeliui hat d_0 get_Dep_T05_d0
+
+   # i{d_0}
+   # bedimensini modeli apsibrezti, pakeisti i i hati
+   # apskaiciuoti hati bedimensiniame modelyje daugeliui hat d_0
+    T_response = get_T(product, 50) * hatt
     plt.xlim(0, T_response)
     plt.ylim(0, 1.2)
     plt.show()
+
+# def get_Dep_T05_d0(substrate_):
+#     '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
+#     selektyvios membranos storio pagal apsibreztus parametrus'''
+#     intervalo_daznis = 30.
+#     hatd0_intervalas = 2.
+#     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
+#     srove = []
+#     get_current
+#     for t in range(int(intervalo_daznis)):
+#         n0 = int((zingsnio_dydis + (zingsnio_dydis * t))*d1/h)
+#         n = n0 + n1
+#         product_ = get_product_matrix(substrate_, n, n0)
+#         T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
+#         T05_ = get_T05(product, T_)
+#         # TODO hati
+#         current_ = get_current(product_[int(T_ / h)][1])
+#         srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
+#     return srove
+#
+# def get_Dep_dif_d0(substrate_):
+#     '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
+#     selektyvios membranos storio pagal apsibreztus parametrus'''
+#     intervalo_daznis = 20.
+#     hatd0_intervalas = 1.
+#     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
+#     srove = []
+#     get_current
+#     for t in range(int(intervalo_daznis)):
+#         n0 = int((zingsnio_dydis + (zingsnio_dydis * t))*d1/h)
+#         n = n0 + n1
+#         product_ = get_product_matrix(substrate_, n, n0)
+#         T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
+#         T05_ = get_T05(product, T_)
+#         # TODO hati
+#         current_ = get_current(product_[int(T_ / h)][1])
+#         srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
+#     return srove
+#
