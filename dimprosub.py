@@ -36,7 +36,7 @@ def draw_matrix(substrate, n, label='S, micro M', dim=1):
   #  plt.show()
 
 def get_current(product):
-    return ne*F*Dp*array(product)/h/10**6
+    return (array(product))/(h*Km)
 
 def draw_T05_d0(srove):
     plt.plot([e[0] for e in srove], [e[1] for e in srove],'bo')
@@ -94,7 +94,7 @@ def perkelties_metodas(coef):
     X.reverse()
     return X
 
-S0 = 1 # 1 microM = 0,01KM
+S0 = 50 # 1 microM = 0,01KM
 P0 = 0 #
 ne = 2
 #N = ~200, 1% paklaida, 303p del laiko
@@ -241,7 +241,7 @@ def get_Dep_T05_d0(substrate_):
     hatd0_intervalas = 2.
     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
     sroves = []
-    for Vmax_ in [50, 100, 500]:
+    for Vmax_ in [1, 10, 100]:
         srove = []
         for t in range(int(intervalo_daznis)):
             n0_ = int((zingsnio_dydis + (zingsnio_dydis * t))*d1/h)
@@ -250,7 +250,7 @@ def get_Dep_T05_d0(substrate_):
             T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
             T05_ = (get_T05(product_, T_, (n0_ + n1) * h) * Ds) / (d1 * d1)
             current_ = get_current(product_[int(T_ / h)][1] / Km)
-            srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
+            srove.append([(zingsnio_dydis + (zingsnio_dydis * t)) / 3, current_, T05_])
         sroves.append(srove)
 
     # for S0_ in [0.5, 1, 5]:
@@ -272,9 +272,9 @@ def get_Dep_T05_d0(substrate_):
     plt.plot([e[0] for e in sroves[2]], [e[1] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 50)/(Km * Ds))))
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 100)/(Km * Ds))))
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 500)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.33')# + str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 3.3')# + str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 33')# + str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{d}_0$')
@@ -286,9 +286,9 @@ def get_Dep_T05_d0(substrate_):
     plt.plot([e[0] for e in sroves[1]], [e[2] for e in sroves[1]],'rv-')
 
     legend = []
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 500)/(Km * Ds))))
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 50)/(Km * Ds))))
-    legend.append('$\sigma^2$ = ' + str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 33')# + str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.33')# + str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 3.3')# + str(int((d1 * d1 * 10)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{d}_0$')
@@ -319,7 +319,7 @@ def get_Dep_dif_d0(substrate_):
     hatd0_intervalas = 1.
     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
     sroves = []
-    for Vmax_ in [50, 100, 500]:
+    for Vmax_ in [1, 10, 100]:
         srove = []
         for t in range(int(intervalo_daznis)):
             D1p_ = int((zingsnio_dydis + (zingsnio_dydis * t))*Ds)
@@ -350,9 +350,9 @@ def get_Dep_dif_d0(substrate_):
     plt.plot([e[0] for e in sroves[2]], [e[1] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 50)/(Km * Ds))))
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 100)/(Km * Ds))))
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 500)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.33')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 3.3')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 33')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{D}_{1P}$')
@@ -364,9 +364,9 @@ def get_Dep_dif_d0(substrate_):
     plt.plot([e[0] for e in sroves[1]], [e[2] for e in sroves[1]],'rv-')
 
     legend = []
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 500)/(Km * Ds))))
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 50)/(Km * Ds))))
-    legend.append('$\sigma^2$ = '+ str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 33')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.33')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 3.3')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{D}_{1P}$')
