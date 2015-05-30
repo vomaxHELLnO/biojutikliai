@@ -35,8 +35,8 @@ def draw_matrix(substrate, n, label='S, micro M', dim=1):
     plt.legend(['0.5s','1s','3s','5s'],loc = 'left')
   #  plt.show()
 
-def get_current(product):
-    return (array(product))/(h*Km)
+def get_current(product, nn):
+    return (array(product) *nn)/(Km)
 
 def draw_T05_d0(srove):
     plt.plot([e[0] for e in srove], [e[1] for e in srove],'bo')
@@ -217,7 +217,7 @@ def get_product_matrix(substrate, n, n0, D1p, Vmax):
 
 def get_T(product, enzyme_width):
     time = 0
-    i1 = get_current(array(product)[:, 1])
+    i1 = get_current(array(product)[:, 1], 1)
     for t in range(int(T/tau)):
         if time == 0 and (t*tau) > 1.:
             if ((t*tau)/i1[t])*abs((i1[t]-i1[t-1])/((t*tau)-((t-1)*tau))) < epsilon:
@@ -227,7 +227,7 @@ def get_T(product, enzyme_width):
 
 def get_T05(product, T_, d):
     time = 0
-    i1 = get_current(array(product)[:, 1])
+    i1 = get_current(array(product)[:, 1], 1)
     for t in range(int(T_/tau)):
         if time == 0:
             if (i1[t]/i1[(T_/tau)-1]) > 0.5:
@@ -237,7 +237,7 @@ def get_T05(product, T_, d):
 def get_Dep_T05_d0(substrate_):
     '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
     selektyvios membranos storio pagal apsibreztus parametrus'''
-    intervalo_daznis = 40.
+    intervalo_daznis = 10.
     hatd0_intervalas = 2.
     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
     sroves = []
@@ -248,8 +248,8 @@ def get_Dep_T05_d0(substrate_):
             n_ = n0_ + n1
             product_ = get_product_matrix(substrate_, n_, n0_, 1000, Vmax_)
             T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
-            T05_ = (get_T05(product_, T_, (n0_ + n1) * h) * Ds) / (d1 * d1)
-            current_ = get_current(product_[int(T_ / h)][1] / Km)
+            T05_ = (get_T05(product_, T_, (n0_ + n1) * h)) *Ds  / (n_ *h* n_ *h)
+            current_ = get_current(product_[int(T_ / h)][1], n_)
             srove.append([(zingsnio_dydis + (zingsnio_dydis * t)) / 3, current_, T05_])
         sroves.append(srove)
 
@@ -277,8 +277,8 @@ def get_Dep_T05_d0(substrate_):
     legend.append('$\sigma^2$ = 33')# + str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
-    plt.xlabel('$\hat{d}_0$')
-    plt.ylabel('$\hat{i}$')
+    plt.xlabel('$\hat{d}_0$', fontsize = 20)
+    plt.ylabel('$\hat{i}$', fontsize = 20)
     plt.show()
 
     plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
@@ -291,8 +291,8 @@ def get_Dep_T05_d0(substrate_):
     legend.append('$\sigma^2$ = 3.3')# + str(int((d1 * d1 * 10)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
-    plt.xlabel('$\hat{d}_0$')
-    plt.ylabel('$\hat{T}_{0.5}$')
+    plt.xlabel('$\hat{d}_0$', fontsize = 20)
+    plt.ylabel('$\hat{T}_{0.5}$', fontsize = 20)
     plt.show()
     # skirtingi s0
     # plt.plot([e[0] for e in sroves[3]], [e[1] for e in sroves[3]],'bo')
@@ -325,10 +325,10 @@ def get_Dep_dif_d0(substrate_):
             D1p_ = int((zingsnio_dydis + (zingsnio_dydis * t))*Ds)
             product_ = get_product_matrix(substrate_, 1200, 200, D1p_, Vmax_)
             T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
-            T05_ = (get_T05(product_, T_, 1200) * Ds) / ((d1 + d0)*(d1+d0))
+            T05_ = (get_T05(product_, T_, 1200)) * Ds / ((1200 * h)*(1200 * h))
 
             # TODO hati
-            current_ = get_current(product_[int(T_ / h)][1] / Km)
+            current_ = get_current(product_[int(T_ / h)][1], 1200)
             srove.append([zingsnio_dydis + (zingsnio_dydis * t), current_, T05_])
         sroves.append(srove)
 
@@ -355,8 +355,8 @@ def get_Dep_dif_d0(substrate_):
     legend.append('$\sigma^2$ = 33')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
-    plt.xlabel('$\hat{D}_{1P}$')
-    plt.ylabel('$\hat{i}$')
+    plt.xlabel('$\hat{D}_{1P}$', fontsize = 20)
+    plt.ylabel('$\hat{i}$', fontsize = 20)
     plt.show()
 
     plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
@@ -369,8 +369,8 @@ def get_Dep_dif_d0(substrate_):
     legend.append('$\sigma^2$ = 3.3')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
-    plt.xlabel('$\hat{D}_{1P}$')
-    plt.ylabel('$\hat{T}_{0.5}$')
+    plt.xlabel('$\hat{D}_{1P}$', fontsize = 20)
+    plt.ylabel('$\hat{T}_{0.5}$', fontsize = 20)
     plt.show()
     # skirtingi s0
     # plt.plot([e[0] for e in sroves[3]], [e[1] for e in sroves[3]],'bo')
@@ -407,8 +407,8 @@ if __name__ == '__main__':
     # plt.plot([d0 / (d0+d1),d0 / (d0+d1)], [0, d0 / (d0+d1)/35], 'm--')
     # plt.show()
 
-    #get_Dep_T05_d0(substrate)
-    get_Dep_dif_d0(substrate)
+    get_Dep_T05_d0(substrate)
+    #get_Dep_dif_d0(substrate)
    # exit()
    # print_matrix(product)
     colors = ['m','r','b','g']
