@@ -94,7 +94,7 @@ def perkelties_metodas(coef):
     X.reverse()
     return X
 
-S0 = 50 # 1 microM = 0,01KM
+S0 = 150 # 1 microM = 0,01KM
 P0 = 0 #
 ne = 2
 #N = ~200, 1% paklaida, 303p del laiko
@@ -234,23 +234,24 @@ def get_T05(product, T_, d):
                 time = t * tau # * Ds) / (d * d)  # t- laiko zingsnis
     return time
 
-def get_Dep_T05_d0(substrate_):
+def get_Dep_T05_d0():
     '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
     selektyvios membranos storio pagal apsibreztus parametrus'''
-    intervalo_daznis = 10.
-    hatd0_intervalas = 2.
+    intervalo_daznis = 40.
+    hatd0_intervalas = 1.
     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
     sroves = []
-    for Vmax_ in [1, 10, 100]:
+    for Vmax_ in [1, 10., 100.]:
         srove = []
+        substrate_ = get_substrate_matrix(Vmax_, S0)
         for t in range(int(intervalo_daznis)):
             n0_ = int((zingsnio_dydis + (zingsnio_dydis * t))*d1/h)
             n_ = n0_ + n1
-            product_ = get_product_matrix(substrate_, n_, n0_, 1000, Vmax_)
+            product_ = get_product_matrix(substrate_, n_, n0_, 300., Vmax_)
             T_ = get_T(product_, (zingsnio_dydis + (zingsnio_dydis * t))*d1)
             T05_ = (get_T05(product_, T_, (n0_ + n1) * h)) *Ds  / (n_ *h* n_ *h)
             current_ = get_current(product_[int(T_ / h)][1], n_)
-            srove.append([(zingsnio_dydis + (zingsnio_dydis * t)) / 3, current_, T05_])
+            srove.append([(zingsnio_dydis + (zingsnio_dydis * t)) / 2., current_, T05_])
         sroves.append(srove)
 
     # for S0_ in [0.5, 1, 5]:
@@ -272,23 +273,23 @@ def get_Dep_T05_d0(substrate_):
     plt.plot([e[0] for e in sroves[2]], [e[1] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = 0.33')# + str(int((d1 * d1 * 1)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 3.3')# + str(int((d1 * d1 * 10)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 33')# + str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 1)$')# + str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 10)$')# + str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 100)$')# + str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{d}_0$', fontsize = 20)
     plt.ylabel('$\hat{i}$', fontsize = 20)
     plt.show()
 
-    plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
     plt.plot([e[0] for e in sroves[0]], [e[2] for e in sroves[0]],'bo-')
     plt.plot([e[0] for e in sroves[1]], [e[2] for e in sroves[1]],'rv-')
+    plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = 33')# + str(int((d1 * d1 * 100)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 0.33')# + str(int((d1 * d1 * 1)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 3.3')# + str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 1)$')# + str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 10)$')# + str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2(V_{max} = 100)$')# + str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{d}_0$', fontsize = 20)
@@ -312,15 +313,16 @@ def get_Dep_T05_d0(substrate_):
     # plt.show()
     return srove
 
-def get_Dep_dif_d0(substrate_):
+def get_Dep_dif_d0():
     '''Grazina masyva, kuriame talpinamos priklausomybes puslaikio nuo
     selektyvios membranos storio pagal apsibreztus parametrus'''
     intervalo_daznis = 40.
     hatd0_intervalas = 1.
     zingsnio_dydis = hatd0_intervalas / intervalo_daznis
     sroves = []
-    for Vmax_ in [1, 10, 100]:
+    for Vmax_ in [1., 10., 100.]:
         srove = []
+        substrate_ = get_substrate_matrix(Vmax_, S0)
         for t in range(int(intervalo_daznis)):
             D1p_ = int((zingsnio_dydis + (zingsnio_dydis * t))*Ds)
             product_ = get_product_matrix(substrate_, 1200, 200, D1p_, Vmax_)
@@ -350,23 +352,23 @@ def get_Dep_dif_d0(substrate_):
     plt.plot([e[0] for e in sroves[2]], [e[1] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = 0.33')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 3.3')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 33')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.48')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 4.8')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 48')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{D}_{1P}$', fontsize = 20)
     plt.ylabel('$\hat{i}$', fontsize = 20)
     plt.show()
 
-    plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
     plt.plot([e[0] for e in sroves[0]], [e[2] for e in sroves[0]],'bo-')
     plt.plot([e[0] for e in sroves[1]], [e[2] for e in sroves[1]],'rv-')
+    plt.plot([e[0] for e in sroves[2]], [e[2] for e in sroves[2]],'gs-')
 
     legend = []
-    legend.append('$\sigma^2$ = 33')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 0.33')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
-    legend.append('$\sigma^2$ = 3.3')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 0.48')#+ str(int((d1 * d1 * 1)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 4.8')#+ str(int((d1 * d1 * 10)/(Km * Ds))))
+    legend.append('$\sigma^2$ = 48')#+ str(int((d1 * d1 * 100)/(Km * Ds))))
 
     plt.legend(legend, loc = 'upper right')
     plt.xlabel('$\hat{D}_{1P}$', fontsize = 20)
@@ -391,7 +393,7 @@ def get_Dep_dif_d0(substrate_):
     return srove
 
 if __name__ == '__main__':
-    substrate = get_substrate_matrix(Vmax, S0)
+  #  substrate = get_substrate_matrix(Vmax, S0)
   #  draw_matrix(substrate, n1, 'S, micro M')
   #  plt.show()
     # n = n1 + n0
@@ -407,8 +409,8 @@ if __name__ == '__main__':
     # plt.plot([d0 / (d0+d1),d0 / (d0+d1)], [0, d0 / (d0+d1)/35], 'm--')
     # plt.show()
 
-    get_Dep_T05_d0(substrate)
-    #get_Dep_dif_d0(substrate)
+    #get_Dep_T05_d0()
+    get_Dep_dif_d0()
    # exit()
    # print_matrix(product)
     colors = ['m','r','b','g']
